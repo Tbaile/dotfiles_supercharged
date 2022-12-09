@@ -1,0 +1,5 @@
+- name: Setup System
+  ansible.builtin.import_tasks: system.yml
+
+- name: Add default User
+  ansible.builtin.import_tasks: user.yml

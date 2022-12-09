@@ -1,0 +1,11 @@
+system:
+  hostname: <hostname>
+  timezone: <timezone found in /usr/share/zoneinfo/>
+  keymap: <keymap for vconsole>
+  locales:
+    - <list of locales to enable and generate>
+
+user:
+  comment: <default user comment>
+  name: <default user name>
+  password: <hashed user password>

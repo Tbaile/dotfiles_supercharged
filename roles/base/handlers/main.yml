@@ -1,0 +1,5 @@
+- name: Run hwclock
+  ansible.builtin.command: hwclock -w
+  changed_when: false
+  when: ansible_os_family == "Archlinux"
+  listen: "sync time"

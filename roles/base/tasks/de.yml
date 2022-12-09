@@ -1,0 +1,6 @@
+- name: Install Desktop Environment
+  community.general.pacman:
+    name:
+      - plasma-meta
+      - konsole
+      - kate

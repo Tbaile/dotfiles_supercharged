@@ -1,0 +1,48 @@
+- name: Set time zone
+  community.general.timezone:
+    name: "{{ system.timezone }}"
+  when: system.timezone is defined
+  notify:
+    - "sync time"
+
+- name: Set vconsole keymap
+  ansible.builtin.lineinfile:
+    path: /etc/vconsole.conf
+    line: "KEYMAP={{ system.keymap }}"
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  when: system.keymap is defined
+
+- name: Ensure locale is present
+  community.general.locale_gen:
+    name: "{{ item }}"
+  loop: "{{ system.locales }}"
+  when: system.locales is defined
+
+- name: Set locale.conf
+  ansible.builtin.copy:
+    src: etc/locale.conf
+    dest: /etc/locale.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Set Hostname
+  ansible.builtin.hostname:
+    name: "{{ system.hostname }}"
+  when: system.hostname is defined
+
+- name: Set Machine Info
+  ansible.builtin.copy:
+    src: etc/machine-info
+    dest: /etc/machine-info
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Increase number of login tries to 10
+  ansible.builtin.lineinfile:
+    path: /etc/security/faillock.conf
+    line: "deny = 10"
