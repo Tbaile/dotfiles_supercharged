@@ -1,5 +1,11 @@
 - name: Setup System
   ansible.builtin.import_tasks: system.yml
 
-- name: Add default User
+- name: Setup Desktop Environment
+  ansible.builtin.import_tasks: de.yml
+
+- name: Add User Configuration
   ansible.builtin.import_tasks: user.yml
+
+- name: Setup passwordless SSH key
+  ansible.builtin.import_tasks: ssh.yml

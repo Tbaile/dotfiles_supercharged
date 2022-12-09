@@ -1,6 +1,6 @@
-- name: Install Desktop Environment
+- name: Install Desktop Environment and Applications
   community.general.pacman:
     name:
       - plasma-meta
       - konsole
-      - kate
+  when: ansible_pkg_mgr == "pacman"
