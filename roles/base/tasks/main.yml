@@ -7,5 +7,8 @@
 - name: Add User Configuration
   ansible.builtin.import_tasks: user.yml
 
-- name: Setup passwordless SSH key
+- name: Setup SSH config
   ansible.builtin.import_tasks: ssh.yml
+
+- name: Setup GPG config
+  ansible.builtin.import_tasks: gpg.yml

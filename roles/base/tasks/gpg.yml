@@ -1,0 +1,20 @@
+- name: Structure for environment.d
+  ansible.builtin.file:
+    path: "/home/{{ user['name'] }}/.gnupg"
+    state: directory
+    owner: "{{ user['name'] }}"
+    group: "{{ user['name'] }}"
+    mode: 0755
+
+- name: Set GPG config
+  ansible.builtin.copy:
+    src: home/gnupg/gpg-agent.conf
+    dest: "/home/{{ user['name'] }}/.gnupg/gpg-agent.conf"
+    owner: "{{ user['name'] }}"
+    group: "{{ user['name'] }}"
+    mode: 0600
+
+- name: Add kwalletcli to aur to install
+  ansible.builtin.set_fact:
+    aur_packages: "{{ aur_packages + ['kwalletcli'] }}"
+  when: ansible_pkg_mgr == "pacman"
