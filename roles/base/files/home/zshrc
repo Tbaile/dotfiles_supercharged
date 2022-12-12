@@ -21,5 +21,8 @@ source $ZSH/oh-my-zsh.sh
 # User configuration.
 export EDITOR='vim'
 
+# GPG TTY
+export GPG_TTY=$(tty)
+
 # Source powerlevel10k configuration.
 source ~/.p10k.zsh

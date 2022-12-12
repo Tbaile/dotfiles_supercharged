@@ -1,9 +1,6 @@
 - name: Setup System
   ansible.builtin.import_tasks: system.yml
 
-- name: Setup Desktop Environment
-  ansible.builtin.import_tasks: de.yml
-
 - name: Add User Configuration
   ansible.builtin.import_tasks: user.yml
 

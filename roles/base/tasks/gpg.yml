@@ -4,7 +4,7 @@
     state: directory
     owner: "{{ user['name'] }}"
     group: "{{ user['name'] }}"
-    mode: 0755
+    mode: 0700
 
 - name: Set GPG config
   ansible.builtin.copy:
