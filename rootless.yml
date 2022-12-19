@@ -1,0 +1,9 @@
+- name: Rootless Provisioning
+  hosts: localhost
+  pre_tasks:
+    - name: Check if ansible_user is default user
+      ansible.builtin.fail:
+        msg: "This playbook must be run as {{ user['name'] }}."
+      when: lookup('env', 'USER') != user['name']
+  roles:
+    - role: config

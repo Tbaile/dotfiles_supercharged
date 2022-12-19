@@ -47,9 +47,11 @@
     path: /etc/security/faillock.conf
     line: "deny = 10"
 
-- name: Install sudo
+- name: Install user requirements
   community.general.pacman:
-    name: sudo
+    name:
+      - sudo
+      - zsh
   when: ansible_pkg_mgr == "pacman"
 
 - name: Add wheel Group
@@ -61,3 +63,14 @@
     path: /etc/sudoers
     line: "%wheel ALL=(ALL:ALL) ALL"
     validate: "visudo -cf %s"
+
+- name: Create default user
+  ansible.builtin.user:
+    comment: "{{ user['comment'] }}"
+    name: "{{ user['name'] }}"
+    group: "{{ user['name'] }}"
+    groups: wheel
+    append: true
+    password: "{{ user['password'] }}"
+    update_password: on_create
+    shell: /usr/bin/zsh

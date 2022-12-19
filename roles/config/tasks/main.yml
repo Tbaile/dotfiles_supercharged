@@ -1,0 +1,35 @@
+- name: Add Git Personal configuration
+  ansible.builtin.copy:
+    src: "gitconfig"
+    dest: "/home/{{ user['name'] }}/.gitconfig"
+    mode: 0600
+
+- name: Add Git Work configuration
+  ansible.builtin.copy:
+    src: "gitconfig.nethesis"
+    dest: "/home/{{ user['name'] }}/.gitconfig.nethesis"
+    mode: 0600
+
+- name: Clone ohmyzsh/ohmyzsh # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: /home/{{ user['name'] }}/.oh-my-zsh
+    depth: 1
+
+- name: Copy .zshrc
+  ansible.builtin.copy:
+    src: "zshrc"
+    dest: "/home/{{ user['name'] }}/.zshrc"
+    mode: 0644
+
+- name: Clone powerlevel10k/powerlevel10k # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: /home/{{ user['name'] }}/.oh-my-zsh/custom/themes/powerlevel10k
+    depth: 1
+
+- name: Copy .p10k.zsh
+  ansible.builtin.copy:
+    src: "p10k.zsh"
+    dest: "/home/{{ user['name'] }}/.p10k.zsh"
+    mode: 0644
