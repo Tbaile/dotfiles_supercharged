@@ -1,5 +1,4 @@
 {
-    "ansible.python.activationScript": "venv/bin/activate",
     "files.associations": {
         "**/group_vars/**/*.yml": "ansible",
         "**/roles/**/*.yml": "ansible",
