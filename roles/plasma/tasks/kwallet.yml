@@ -1,0 +1,74 @@
+- name: Install requirements
+  when: ansible_pkg_mgr == "pacman"
+  block:
+    - name: Install requirements
+      community.general.pacman:
+        name:
+          - openssh
+          - kwallet
+          - kwallet-pam
+          - ksshaskpass
+
+    - name: Add kwalletcli from aur
+      kewlfft.aur.aur:
+        name: kwalletcli
+
+- name: Structure for user systemd
+  ansible.builtin.file:
+    path: "/home/{{ user['name'] }}/.config/systemd/user"
+    state: directory
+    mode: 0700
+
+- name: Add user SSH agent
+  ansible.builtin.copy:
+    src: kwallet/ssh/ssh-agent.service
+    dest: "/home/{{ user['name'] }}/.config/systemd/user/ssh-agent.service"
+    mode: 0600
+
+- name: Get passwd facts
+  ansible.builtin.getent:
+    database: passwd
+
+- name: Enable SSH-Agent for default user
+  ansible.builtin.systemd:
+    name: ssh-agent
+    state: started
+    enabled: true
+    daemon_reload: true
+    scope: user
+
+- name: Structure for user systemd
+  ansible.builtin.file:
+    path: "/home/{{ user['name'] }}/.config/autostart"
+    state: directory
+    mode: 0700
+
+- name: Copy ssh-add desktop runner
+  ansible.builtin.copy:
+    src: kwallet/ssh/ssh-add.desktop
+    dest: "/home/{{ user['name'] }}/.config/autostart/ssh-add.desktop"
+    mode: 0600
+
+- name: Structure for environment.d
+  ansible.builtin.file:
+    path: "/home/{{ user['name'] }}/.config/environment.d"
+    state: directory
+    mode: 0700
+
+- name: Copy askpass variables to env
+  ansible.builtin.copy:
+    src: kwallet/ssh/ssh_askpass.conf
+    dest: "/home/{{ user['name'] }}/.config/environment.d/ssh_askpass.conf"
+    mode: 0600
+
+- name: Structure for .gnupg
+  ansible.builtin.file:
+    path: "/home/{{ user['name'] }}/.gnupg"
+    state: directory
+    mode: 0700
+
+- name: Set GPG config
+  ansible.builtin.copy:
+    src: kwallet/gnupg/gpg-agent.conf
+    dest: "/home/{{ user['name'] }}/.gnupg/gpg-agent.conf"
+    mode: 0600

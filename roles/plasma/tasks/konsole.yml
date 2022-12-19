@@ -1,0 +1,27 @@
+- name: Konsole in Arch Linux
+  when: ansible_pkg_mgr == "pacman"
+  block:
+    - name: Install konsole
+      community.general.pacman:
+        name: konsole
+
+    - name: Install nerd-fonts-meslo from aur
+      kewlfft.aur.aur:
+        name: nerd-fonts-meslo
+
+- name: Copy default profile
+  ansible.builtin.copy:
+    src: konsole/profile
+    dest: "/home/{{ user['name'] }}/.local/share/konsole/Tommaso.profile"
+    owner: "{{ user['name'] }}"
+    group: "{{ user['name'] }}"
+    mode: 0600
+
+- name: Copy konsole config
+  ansible.builtin.copy:
+    src: konsole/konsolerc
+    dest: "/home/{{ user['name'] }}/.config/konsolerc"
+    owner: "{{ user['name'] }}"
+    group: "{{ user['name'] }}"
+    mode: 0600
+    force: false

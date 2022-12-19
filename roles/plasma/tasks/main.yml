@@ -1,0 +1,8 @@
+- name: Config Plasma
+  ansible.builtin.import_tasks: plasma.yml
+
+- name: Configure Konsole
+  ansible.builtin.import_tasks: konsole.yml
+
+- name: Configure Kwallet
+  ansible.builtin.import_tasks: kwallet.yml
