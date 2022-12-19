@@ -84,3 +84,7 @@
     group: root
     mode: 0600
     validate: 'visudo -cf %s'
+
+- name: Add yay through aur
+  kewlfft.aur.aur:
+    name: yay-bin
