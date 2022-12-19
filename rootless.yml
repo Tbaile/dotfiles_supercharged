@@ -5,5 +5,10 @@
       ansible.builtin.fail:
         msg: "This playbook must be run as {{ user['name'] }}."
       when: lookup('env', 'USER') != user['name']
+      tags:
+        - always
   roles:
     - role: config
+    - role: plasma
+      tags:
+        - plasma
