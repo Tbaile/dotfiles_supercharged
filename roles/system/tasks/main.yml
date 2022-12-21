@@ -1,7 +1,11 @@
+- name: Set Hostname
+  ansible.builtin.hostname:
+    name: "{{ system.hostname }}"
+  when: system.hostname is defined
+
 - name: Set time zone
   community.general.timezone:
-    name: "{{ system.timezone }}"
-  when: system.timezone is defined
+    name: Europe/Rome
   notify:
     - "sync time"
 
@@ -10,37 +14,28 @@
     path: /etc/vconsole.conf
     line: "KEYMAP={{ system.keymap }}"
     create: true
-    owner: root
-    group: root
     mode: 0644
   when: system.keymap is defined
 
 - name: Ensure locale is present
   community.general.locale_gen:
     name: "{{ item }}"
-  loop: "{{ system.locales }}"
-  when: system.locales is defined
+  loop:
+    - en_US.UTF-8
+    - it_IT.UTF-8
 
 - name: Set locale.conf
   ansible.builtin.copy:
     src: etc/locale.conf
     dest: /etc/locale.conf
-    owner: root
-    group: root
     mode: 0644
-
-- name: Set Hostname
-  ansible.builtin.hostname:
-    name: "{{ system.hostname }}"
-  when: system.hostname is defined
 
 - name: Set Machine Info
-  ansible.builtin.copy:
-    src: etc/machine-info
+  ansible.builtin.template:
+    src: etc/machine-info.j2
     dest: /etc/machine-info
-    owner: root
-    group: root
     mode: 0644
+  when: system.pretty_hostname is defined
 
 - name: Increase number of login tries to 10
   ansible.builtin.lineinfile:
@@ -49,9 +44,7 @@
 
 - name: Install user requirements
   community.general.pacman:
-    name:
-      - sudo
-      - zsh
+    name: sudo
   when: ansible_pkg_mgr == "pacman"
 
 - name: Add wheel Group
@@ -63,28 +56,3 @@
     path: /etc/sudoers
     line: "%wheel ALL=(ALL:ALL) ALL"
     validate: "visudo -cf %s"
-
-- name: Create default user
-  ansible.builtin.user:
-    comment: "{{ user['comment'] }}"
-    name: "{{ user['name'] }}"
-    group: "{{ user['name'] }}"
-    groups: wheel
-    append: true
-    password: "{{ user['password'] }}"
-    update_password: on_create
-    shell: /usr/bin/zsh
-
-- name: Allow the default user to run `sudo pacman` without a password
-  ansible.builtin.lineinfile:
-    path: /etc/sudoers.d/11-install-aur_builder
-    line: "{{ user['name'] }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
-    create: true
-    owner: root
-    group: root
-    mode: 0600
-    validate: 'visudo -cf %s'
-
-- name: Add yay through aur
-  kewlfft.aur.aur:
-    name: yay-bin

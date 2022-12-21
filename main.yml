@@ -1,0 +1,5 @@
+- name: Provision Workstation
+  hosts: localhost
+  roles:
+    - name: system
+      become: true

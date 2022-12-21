@@ -1,9 +1,0 @@
-- name: Rootful Provisioning
-  hosts: localhost
-  pre_tasks:
-    - name: Check if ansible_user is root
-      ansible.builtin.fail:
-        msg: This playbook must be run as root.
-      when: lookup('env', 'USER') != "root"
-  roles:
-    - role: system
