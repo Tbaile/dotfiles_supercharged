@@ -3,3 +3,4 @@
   roles:
     - name: system
     - name: plasma
+    - name: user

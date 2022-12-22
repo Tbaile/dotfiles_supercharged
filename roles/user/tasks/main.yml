@@ -1,0 +1,42 @@
+- name: Install shell packages
+  community.general.pacman:
+    name:
+      - zsh
+      - git
+  when: ansible_pkg_mgr == "pacman"
+
+- name: Clone ohmyzsh/ohmyzsh # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: /home/{{ ansible_user_id }}/.oh-my-zsh
+    depth: 1
+
+- name: Clone powerlevel10k/powerlevel10k # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: /home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k
+    depth: 1
+
+- name: Add Git Personal configuration
+  ansible.builtin.copy:
+    src: "gitconfig"
+    dest: "/home/{{ ansible_user_id }}/.gitconfig"
+    mode: 0600
+
+- name: Add Git Work configuration
+  ansible.builtin.copy:
+    src: "gitconfig.nethesis"
+    dest: "/home/{{ ansible_user_id }}/.gitconfig.nethesis"
+    mode: 0600
+
+- name: Copy .zshrc
+  ansible.builtin.copy:
+    src: "zshrc"
+    dest: "/home/{{ ansible_user_id }}/.zshrc"
+    mode: 0644
+
+- name: Copy .p10k.zsh
+  ansible.builtin.copy:
+    src: "p10k.zsh"
+    dest: "/home/{{ ansible_user_id }}/.p10k.zsh"
+    mode: 0644
