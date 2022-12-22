@@ -1,58 +1,86 @@
-- name: Set Hostname
-  ansible.builtin.hostname:
-    name: "{{ system.hostname }}"
-  when: system.hostname is defined
+- name: Root operations
+  become: true
+  block:
+    - name: Set Hostname
+      ansible.builtin.hostname:
+        name: "{{ system.hostname }}"
+      when: system.hostname is defined
 
-- name: Set time zone
-  community.general.timezone:
-    name: Europe/Rome
-  notify:
-    - "sync time"
+    - name: Set time zone
+      community.general.timezone:
+        name: Europe/Rome
+      notify:
+        - "sync time"
 
-- name: Set vconsole keymap
-  ansible.builtin.lineinfile:
-    path: /etc/vconsole.conf
-    line: "KEYMAP={{ system.keymap }}"
-    create: true
-    mode: 0644
-  when: system.keymap is defined
+    - name: Set vconsole keymap
+      ansible.builtin.lineinfile:
+        path: /etc/vconsole.conf
+        line: "KEYMAP={{ system.keymap }}"
+        create: true
+        mode: 0644
+      when: system.keymap is defined
 
-- name: Ensure locale is present
-  community.general.locale_gen:
-    name: "{{ item }}"
-  loop:
-    - en_US.UTF-8
-    - it_IT.UTF-8
+    - name: Ensure locale is present
+      community.general.locale_gen:
+        name: "{{ item }}"
+      loop:
+        - en_US.UTF-8
+        - it_IT.UTF-8
 
-- name: Set locale.conf
-  ansible.builtin.copy:
-    src: etc/locale.conf
-    dest: /etc/locale.conf
-    mode: 0644
+    - name: Set locale.conf
+      ansible.builtin.copy:
+        src: etc/locale.conf
+        dest: /etc/locale.conf
+        mode: 0644
 
-- name: Set Machine Info
-  ansible.builtin.template:
-    src: etc/machine-info.j2
-    dest: /etc/machine-info
-    mode: 0644
-  when: system.pretty_hostname is defined
+    - name: Set Machine Info
+      community.general.ini_file:
+        path: /etc/machine-info
+        section: null
+        option: PRETTY_HOSTNAME
+        value: "{{ system.pretty_hostname }}"
+        mode: 0644
+        no_extra_spaces: true
+      when: system.pretty_hostname is defined
 
-- name: Increase number of login tries to 10
-  ansible.builtin.lineinfile:
-    path: /etc/security/faillock.conf
-    line: "deny = 10"
+    - name: Increase number of login tries to 10
+      ansible.builtin.lineinfile:
+        path: /etc/security/faillock.conf
+        line: "deny = 10"
 
-- name: Install user requirements
-  community.general.pacman:
-    name: sudo
-  when: ansible_pkg_mgr == "pacman"
+    - name: Install user requirements
+      community.general.pacman:
+        name: sudo
+      when: ansible_pkg_mgr == "pacman"
 
-- name: Add wheel Group
-  ansible.builtin.group:
-    name: wheel
+    - name: Add wheel Group
+      ansible.builtin.group:
+        name: wheel
 
-- name: Wheel group can use sudo
-  ansible.builtin.lineinfile:
-    path: /etc/sudoers
-    line: "%wheel ALL=(ALL:ALL) ALL"
-    validate: "visudo -cf %s"
+    - name: Wheel group can use sudo
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        line: "%wheel ALL=(ALL:ALL) ALL"
+        validate: "visudo -cf %s"
+
+    - name: Pacman Specific Setup
+      when: ansible_pkg_mgr == "pacman"
+      block:
+        - name: Create aur_builder
+          ansible.builtin.user:
+            name: aur_builder
+            comment: Ansible AUR helper
+            system: true
+
+        - name: Allow aur_builder to run passwordless pacman
+          ansible.builtin.lineinfile:
+            path: /etc/sudoers.d/aur_builder-allow-to-sudo-pacman
+            line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+            create: true
+            mode: 0600
+            validate: 'visudo -cf %s'
+
+        - name: Install AUR package manager
+          kewlfft.aur.aur:
+            name: yay-bin
+          become_user: aur_builder
