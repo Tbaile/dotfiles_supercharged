@@ -4,6 +4,7 @@
       - zsh
       - git
   when: ansible_pkg_mgr == "pacman"
+  become: true
 
 - name: Clone ohmyzsh/ohmyzsh # noqa: latest
   ansible.builtin.git:
@@ -40,3 +41,9 @@
     src: "p10k.zsh"
     dest: "/home/{{ ansible_user_id }}/.p10k.zsh"
     mode: 0644
+
+- name: Update user with default shell
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  become: true
