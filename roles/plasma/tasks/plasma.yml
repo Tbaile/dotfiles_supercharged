@@ -10,6 +10,7 @@
           - dolphin
           - kate
           - spectacle
+
     - name: Install optional application deps as deps
       community.general.pacman:
         name:

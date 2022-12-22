@@ -1,6 +1,13 @@
 - name: Root operations
   become: true
   block:
+    - name: Install prerequisite packages
+      community.general.pacman:
+        name:
+          - git
+          - sudo
+      when: ansible_pkg_mgr == "pacman"
+
     - name: Set Hostname
       ansible.builtin.hostname:
         name: "{{ system.hostname }}"
@@ -47,11 +54,6 @@
       ansible.builtin.lineinfile:
         path: /etc/security/faillock.conf
         line: "deny = 10"
-
-    - name: Install user requirements
-      community.general.pacman:
-        name: sudo
-      when: ansible_pkg_mgr == "pacman"
 
     - name: Add wheel Group
       ansible.builtin.group:
