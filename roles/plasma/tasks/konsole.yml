@@ -1,5 +1,6 @@
-- name: Konsole in Arch Linux
+- name: Konsole required software
   when: ansible_pkg_mgr == "pacman"
+  become: true
   block:
     - name: Install konsole
       community.general.pacman:
@@ -8,20 +9,28 @@
     - name: Install nerd-fonts-meslo from aur
       kewlfft.aur.aur:
         name: nerd-fonts-meslo
+      become_user: aur_builder
+
+- name: Set folder structure
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/{{ item }}"
+    state: directory
+    mode: 0700
+  loop:
+    - ".local/share/konsole"
+    - ".config"
 
 - name: Copy default profile
   ansible.builtin.copy:
     src: konsole/profile
-    dest: "/home/{{ user['name'] }}/.local/share/konsole/Tommaso.profile"
-    owner: "{{ user['name'] }}"
-    group: "{{ user['name'] }}"
+    dest: "/home/{{ ansible_user_id }}/.local/share/konsole/Tommaso.profile"
     mode: 0600
 
-- name: Copy konsole config
-  ansible.builtin.copy:
-    src: konsole/konsolerc
-    dest: "/home/{{ user['name'] }}/.config/konsolerc"
-    owner: "{{ user['name'] }}"
-    group: "{{ user['name'] }}"
+- name: Set default profile
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/konsolerc"
+    section: "Desktop Entry"
+    option: DefaultProfile
+    value: Tommaso.profile
     mode: 0600
-    force: false
+    no_extra_spaces: true

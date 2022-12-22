@@ -1,6 +1,27 @@
-- name: Install Desktop Environment with meta package
-  community.general.pacman:
-    name:
-      - plasma-meta
+- name: Handle Pacman DE installation
+  become: true
   when: ansible_pkg_mgr == "pacman"
+  block:
+    - name: Install Desktop Environment and applications
+      community.general.pacman:
+        name:
+          - plasma-meta
+          - ark
+          - dolphin
+          - kate
+          - spectacle
+    - name: Install optional application deps as deps
+      community.general.pacman:
+        name:
+          - unrar
+          - unarchiver
+          - ffmpegthumbs
+          - kdegraphics-thumbnailers
+        reason: dependency
+
+- name: Enable SDDM
+  ansible.builtin.systemd:
+    name: sddm
+    enabled: true
+    daemon_reload: true
   become: true
