@@ -2,5 +2,11 @@
   hosts: localhost
   roles:
     - name: system
+      tags:
+        - system
     - name: plasma
+      tags:
+        - plasma
     - name: user
+      tags:
+        - user
