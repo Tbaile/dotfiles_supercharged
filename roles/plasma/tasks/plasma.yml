@@ -20,6 +20,55 @@
           - kdegraphics-thumbnailers
         reason: dependency
 
+- name: Plasma configuration
+  notify: 'restart sddm'
+  block:
+    - name: Set global configuration
+      community.general.ini_file:
+        path: "/home/{{ ansible_user_id }}/.config/kdeglobals"
+        section: KDE
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        mode: 0644
+        no_extra_spaces: true
+      loop:
+        - { option: "LookAndFeelPackage", value: "org.kde.breezedark.desktop" }
+        - { option: "SingleClick", value: "false" }
+
+    - name: Set virtual Desktops
+      community.general.ini_file:
+        path: "/home/{{ ansible_user_id }}/.config/kwinrc"
+        section: "{{ item.section }}"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        mode: 0644
+        no_extra_spaces: true
+      loop:
+        - { section: "Desktops", option: "Number", value: "6" }
+        - { section: "Desktops", option: "Rows", value: "2" }
+        - { section: "Windows", option: "RollOverDesktops", value: "true" }
+
+    - name: Set keyboard layout for KDE
+      community.general.ini_file:
+        path: "/home/{{ ansible_user_id }}/.config/kxkbrc"
+        section: Layout
+        option: "Model"
+        value: "dell"
+        mode: 0644
+        no_extra_spaces: true
+
+    - name: Configure Modules
+      community.general.ini_file:
+        path: "/home/{{ ansible_user_id }}/.config/kded5rc"
+        section: "{{ item.section }}"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        mode: 0644
+        no_extra_spaces: true
+      loop:
+        - { section: "Module-browserintegrationreminder", option: "autoload", value: "false" }
+        - { section: "Module-device_automounter", option: "autoload", value: "false" }
+
 - name: Enable SDDM
   ansible.builtin.systemd:
     name: sddm

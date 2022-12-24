@@ -1,0 +1,4 @@
+- name: Restart SDDM
+  ansible.builtin.debug:
+    msg: "You'll need to restart SDDM to apply the changes."
+  listen: 'restart sddm'
