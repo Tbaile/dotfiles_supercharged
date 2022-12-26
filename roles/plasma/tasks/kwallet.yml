@@ -5,7 +5,6 @@
     - name: Install requirements
       community.general.pacman:
         name:
-          - openssh
           - kwallet
           - kwallet-pam
           - ksshaskpass
@@ -22,7 +21,6 @@
     mode: 0700
   loop:
     - ".gnupg"
-    - ".config/systemd/user"
     - ".config/environment.d"
 
 - name: Copy files
@@ -31,14 +29,6 @@
     dest: "/home/{{ ansible_user_id }}/{{ item.dest }}"
     mode: 0600
   loop:
-    - { src: "kwallet/ssh/ssh-agent.service", dest: ".config/systemd/user/ssh-agent.service" }
     - { src: "kwallet/ssh/ssh-add.desktop", dest: ".config/autostart/ssh-add.desktop" }
     - { src: "kwallet/ssh/ssh_askpass.conf", dest: ".config/environment.d/ssh_askpass.conf" }
     - { src: "kwallet/gnupg/gpg-agent.conf", dest: ".gnupg/gpg-agent.conf" }
-
-- name: Enable SSH-Agent for current user
-  ansible.builtin.systemd:
-    name: ssh-agent
-    enabled: true
-    daemon_reload: true
-    scope: user
