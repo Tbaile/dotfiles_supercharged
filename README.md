@@ -1,3 +1,3 @@
 ```bash
-pacman -S ansible ansible-core ansible-lint
+pacman -S ansible ansible-core ansible-lint python-requests
 ```

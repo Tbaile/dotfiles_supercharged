@@ -1,0 +1,57 @@
+- name: Setup Docker
+  become: true
+  block:
+    - name: Install Docker
+      community.general.pacman:
+        name:
+          - docker
+          - docker-compose
+          - docker-buildx
+      when: ansible_pkg_mgr == "pacman"
+
+    - name: Add docker Group
+      ansible.builtin.group:
+        name: docker
+
+    - name: Add user to docker Group
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        append: true
+        groups:
+          - docker
+
+    - name: Arch Linux configuration
+      when: ansible_os_family == "Archlinux"
+      block:
+        - name: Enable Native Diff Engine
+          ansible.builtin.copy:
+            src: disable-overlay-redirect-dir.conf
+            dest: /etc/modprobe.d/disable-overlay-redirect-dir.conf
+            mode: 0644
+
+        - name: Remove Modbprobe Overlay
+          community.general.modprobe:
+            name: overlay
+            state: absent
+
+        - name: Enable Modbprobe Overlay
+          community.general.modprobe:
+            name: overlay
+
+    - name: Copy Docker Configuration
+      ansible.builtin.copy:
+        src: daemon.json
+        dest: /etc/docker/daemon.json
+        mode: 0644
+
+    - name: Start Docker Service
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+        enabled: true
+
+- name: Login Docker
+  community.docker.docker_login:
+    username: "{{ docker.username }}"
+    password: "{{ docker.password }}"
+  when: docker is defined
