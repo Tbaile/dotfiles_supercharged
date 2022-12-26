@@ -69,9 +69,29 @@
         - { section: "Module-browserintegrationreminder", option: "autoload", value: "false" }
         - { section: "Module-device_automounter", option: "autoload", value: "false" }
 
-- name: Enable SDDM
-  ansible.builtin.systemd:
-    name: sddm
-    enabled: true
-    daemon_reload: true
-  become: true
+    - name: Set Default shutdown option
+      community.general.ini_file:
+        path: "/home/{{ ansible_user_id }}/.config/ksmserverrc"
+        section: General
+        option: shutdownType
+        value: "2"
+        mode: 0644
+        no_extra_spaces: true
+
+    - name: Set Default Keybindings
+      community.general.ini_file:
+        path: "/home/{{ ansible_user_id }}/.config/kglobalshortcutsrc"
+        section: "kwin"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        mode: 0644
+        no_extra_spaces: true
+      loop:
+        - { option: "Switch One Desktop Down", value: "Meta+Ctrl+Down,Meta+Ctrl+Down,Switch One Desktop Down" }
+        - { option: "Switch One Desktop Up", value: "Meta+Ctrl+Up,Meta+Ctrl+Up,Switch One Desktop Up" }
+        - { option: "Switch One Desktop to the Left", value: "Meta+Ctrl+Left,Meta+Ctrl+Left,Switch One Desktop to the Left" }
+        - { option: "Switch One Desktop to the Right", value: "Meta+Ctrl+Right,Meta+Ctrl+Right,Switch One Desktop to the Right" }
+        - { option: "Window One Desktop Down", value: "Meta+Ctrl+Shift+Down,Meta+Ctrl+Shift+Down,Window One Desktop Down" }
+        - { option: "Window One Desktop Up", value: "Meta+Ctrl+Shift+Up,Meta+Ctrl+Shift+Up,Window One Desktop Up" }
+        - { option: "Window One Desktop to the Left", value: "Meta+Ctrl+Shift+Left,Meta+Ctrl+Shift+Left,Window One Desktop to the Left" }
+        - { option: "Window One Desktop to the Right", value: "Meta+Ctrl+Shift+Right,Meta+Ctrl+Shift+Right,Window One Desktop to the Right" }
