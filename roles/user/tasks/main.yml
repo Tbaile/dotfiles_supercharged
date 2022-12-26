@@ -1,46 +1,81 @@
-- name: Install shell packages
+- name: Install user packages
   community.general.pacman:
     name:
       - zsh
       - git
+      - openssh
   when: ansible_pkg_mgr == "pacman"
   become: true
 
 - name: Clone ohmyzsh/ohmyzsh # noqa: latest
   ansible.builtin.git:
     repo: https://github.com/ohmyzsh/ohmyzsh.git
-    dest: /home/{{ ansible_user_id }}/.oh-my-zsh
+    dest: "/home/{{ ansible_user_id }}/.oh-my-zsh"
     depth: 1
+
+- name: Copy OhMyZsh Configuration
+  ansible.builtin.copy:
+    src: .zshrc
+    dest: "/home/{{ ansible_user_id }}/.zshrc"
+    mode: 0644
 
 - name: Clone powerlevel10k/powerlevel10k # noqa: latest
   ansible.builtin.git:
     repo: https://github.com/romkatv/powerlevel10k.git
-    dest: /home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k
+    dest: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"
     depth: 1
 
-- name: Add Git Personal configuration
+- name: Copy Powerlevel10k Configuration
   ansible.builtin.copy:
-    src: "gitconfig"
-    dest: "/home/{{ ansible_user_id }}/.gitconfig"
-    mode: 0600
-
-- name: Add Git Work configuration
-  ansible.builtin.copy:
-    src: "gitconfig.nethesis"
-    dest: "/home/{{ ansible_user_id }}/.gitconfig.nethesis"
-    mode: 0600
-
-- name: Copy .zshrc
-  ansible.builtin.copy:
-    src: "zshrc"
-    dest: "/home/{{ ansible_user_id }}/.zshrc"
-    mode: 0644
-
-- name: Copy .p10k.zsh
-  ansible.builtin.copy:
-    src: "p10k.zsh"
+    src: .p10k.zsh
     dest: "/home/{{ ansible_user_id }}/.p10k.zsh"
     mode: 0644
+
+- name: Add Git configuration
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "/home/{{ ansible_user_id }}/{{ item.dest }}"
+    mode: 0600
+  loop:
+    - { src: ".gitconfig", dest: ".gitconfig" }
+    - { src: ".gitconfig.nethesis", dest: ".gitconfig.nethesis" }
+
+- name: Create .ssh directory
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/.ssh"
+    state: directory
+    mode: 0700
+
+- name: Copy SSH public key
+  ansible.builtin.copy:
+    src: .ssh/id_rsa.pub
+    dest: "/home/{{ ansible_user_id }}/.ssh/id_rsa.pub"
+    mode: 0600
+
+- name: Copy SSH private key
+  ansible.builtin.copy:
+    src: .ssh/id_rsa
+    dest: "/home/{{ ansible_user_id }}/.ssh/id_rsa"
+    mode: 0600
+
+- name: Create systemd user directory
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/.config/systemd/user"
+    state: directory
+    mode: 0700
+
+- name: Copy SSH Agent service
+  ansible.builtin.copy:
+    src: .config/systemd/user/ssh-agent.service
+    dest: "/home/{{ ansible_user_id }}/.config/systemd/user/ssh-agent.service"
+    mode: 0600
+
+- name: Enable SSH Agent for user
+  ansible.builtin.systemd:
+    name: ssh-agent
+    enabled: true
+    daemon_reload: true
+    scope: user
 
 - name: Update user with default shell
   ansible.builtin.user:
