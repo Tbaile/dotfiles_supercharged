@@ -1,0 +1,42 @@
+- name: Install user packages
+  community.general.pacman:
+    name: openssh
+  when: ansible_pkg_mgr == "pacman"
+  become: true
+
+- name: Create .ssh directory
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/.ssh"
+    state: directory
+    mode: 0700
+
+- name: Copy SSH public key
+  ansible.builtin.copy:
+    src: .ssh/id_rsa.pub
+    dest: "/home/{{ ansible_user_id }}/.ssh/id_rsa.pub"
+    mode: 0600
+
+- name: Copy SSH private key
+  ansible.builtin.copy:
+    src: .ssh/id_rsa
+    dest: "/home/{{ ansible_user_id }}/.ssh/id_rsa"
+    mode: 0600
+
+- name: Create systemd user directory
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/.config/systemd/user"
+    state: directory
+    mode: 0700
+
+- name: Copy SSH Agent service
+  ansible.builtin.copy:
+    src: .config/systemd/user/ssh-agent.service
+    dest: "/home/{{ ansible_user_id }}/.config/systemd/user/ssh-agent.service"
+    mode: 0600
+
+- name: Enable SSH Agent for user
+  ansible.builtin.systemd:
+    name: ssh-agent
+    enabled: true
+    daemon_reload: true
+    scope: user

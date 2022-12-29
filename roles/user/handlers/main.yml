@@ -1,0 +1,26 @@
+- name: Make temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+  register: tempdir
+  listen: 'import gpg keys'
+
+- name: Copy personal GPG key to host
+  ansible.builtin.copy:
+    src: ".gnupg/personal-private-key.asc"
+    dest: "{{ tempdir.path }}/personal-private-key.asc"
+    mode: 0600
+  listen: 'import gpg keys'
+  no_log: true
+
+- name: Copy work GPG key to host
+  ansible.builtin.copy:
+    src: ".gnupg/work-private-key.asc"
+    dest: "{{ tempdir.path }}/work-private-key.asc"
+    mode: 0600
+  listen: 'import gpg keys'
+  no_log: true
+
+- name: Show command to import GPG key
+  ansible.builtin.debug:
+    msg: "Import the GPG keys with: 'gpg --import {{ tempdir.path }}/*.asc && rm -rf {{ tempdir.path }}'"
+  listen: 'import gpg keys'
