@@ -2,7 +2,3 @@ system:
   hostname: <hostname>
   pretty_hostname: <pretty name>
   keymap: <keymap for vconsole>
-
-docker:
-  username: <username>
-  password: <password>
