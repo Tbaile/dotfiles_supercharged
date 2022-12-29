@@ -1,15 +1,11 @@
 - name: Provision Workstation
   hosts: localhost
   roles:
-    - name: system
-      tags:
-        - system
-    - name: plasma
-      tags:
-        - plasma
-    - name: user
-      tags:
-        - user
-    - name: docker
-      tags:
-        - docker
+    - role: system
+      tags: system
+    - role: plasma
+      tags: plasma
+    - role: user
+      tags: user
+    - role: docker
+      tags: docker
