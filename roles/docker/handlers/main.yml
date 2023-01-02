@@ -1,0 +1,16 @@
+- name: Remove Modbprobe Overlay
+  community.general.modprobe:
+    name: overlay
+    state: absent
+  listen: 'overlay modprobe changed'
+
+- name: Enable Modbprobe Overlay
+  community.general.modprobe:
+    name: overlay
+  listen: 'overlay modprobe changed'
+
+- name: Restart Docker
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+  listen: 'docker config changed'

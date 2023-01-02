@@ -20,34 +20,24 @@
         groups:
           - docker
 
-    - name: Arch Linux configuration
+    - name: Enable Native Diff Engine
+      ansible.builtin.copy:
+        src: disable-overlay-redirect-dir.conf
+        dest: /etc/modprobe.d/disable-overlay-redirect-dir.conf
+        mode: 0644
       when: ansible_os_family == "Archlinux"
-      block:
-        - name: Enable Native Diff Engine
-          ansible.builtin.copy:
-            src: disable-overlay-redirect-dir.conf
-            dest: /etc/modprobe.d/disable-overlay-redirect-dir.conf
-            mode: 0644
-
-        - name: Remove Modbprobe Overlay
-          community.general.modprobe:
-            name: overlay
-            state: absent
-
-        - name: Enable Modbprobe Overlay
-          community.general.modprobe:
-            name: overlay
+      notify: 'overlay modprobe changed'
 
     - name: Copy Docker Configuration
       ansible.builtin.copy:
         src: daemon.json
         dest: /etc/docker/daemon.json
         mode: 0644
+      notify: 'docker config changed'
 
     - name: Start Docker Service
       ansible.builtin.service:
         name: docker
-        state: restarted
         enabled: true
 
 - name: Login Docker
