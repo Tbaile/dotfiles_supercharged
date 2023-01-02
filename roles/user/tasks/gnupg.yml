@@ -4,21 +4,15 @@
   when: ansible_pkg_mgr == "pacman"
   become: true
 
-- name: Check GPG keys
+- name: Check if GPG key exists
   environment:
     GNUPGHOME: "/home/{{ ansible_user_id }}/.gnupg"
+  ansible.builtin.shell:
+    cmd: gpg --list-secret-keys --keyid-format=long | grep "{{ item }}"
+  register: gpg_key
+  changed_when: gpg_key.rc == 1
+  failed_when: gpg_key.rc > 1
   notify: 'import gpg keys'
-  block:
-    - name: Check if personal GPG key exist
-      ansible.builtin.shell:
-        cmd: gpg --list-secret-keys --keyid-format=long | grep "91CCDCB31830CD1B220E562808EC00F294397A62$"
-      register: personal_gpg_key
-      changed_when: personal_gpg_key.rc == 1
-      failed_when: personal_gpg_key.rc > 1
-
-    - name: Check if work GPG key exist
-      ansible.builtin.shell:
-        cmd: gpg --list-secret-keys --keyid-format=long | grep "0DB075853AE070032B8A74D164F15A83A08C982F$"
-      register: work_gpg_key
-      changed_when: work_gpg_key.rc == 1
-      failed_when: personal_gpg_key.rc > 1
+  loop:
+    - "91CCDCB31830CD1B220E562808EC00F294397A62$"
+    - "0DB075853AE070032B8A74D164F15A83A08C982F$"
