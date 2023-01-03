@@ -1,0 +1,46 @@
+- name: Install user packages
+  community.general.pacman:
+    name:
+      - zsh
+      - git
+  when: ansible_pkg_mgr == "pacman"
+  become: true
+
+- name: Clone ohmyzsh/ohmyzsh # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: "/home/{{ ansible_user_id }}/.oh-my-zsh"
+    depth: 1
+
+- name: Copy OhMyZsh Configuration
+  ansible.builtin.copy:
+    src: .zshrc
+    dest: "/home/{{ ansible_user_id }}/.zshrc"
+    mode: 0644
+
+- name: Clone powerlevel10k/powerlevel10k # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    depth: 1
+
+- name: Copy Powerlevel10k Configuration
+  ansible.builtin.copy:
+    src: .p10k.zsh
+    dest: "/home/{{ ansible_user_id }}/.p10k.zsh"
+    mode: 0644
+
+- name: Add Git configuration
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "/home/{{ ansible_user_id }}/{{ item.dest }}"
+    mode: 0600
+  loop:
+    - { src: ".gitconfig", dest: ".gitconfig" }
+    - { src: ".gitconfig.nethesis", dest: ".gitconfig.nethesis" }
+
+- name: Update user with default shell
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  become: true
