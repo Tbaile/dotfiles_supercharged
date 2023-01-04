@@ -13,10 +13,10 @@
     depth: 1
 
 - name: Copy OhMyZsh Configuration
-  ansible.builtin.copy:
-    src: .zshrc
+  ansible.builtin.template:
+    src: .zshrc.j2
     dest: "/home/{{ ansible_user_id }}/.zshrc"
-    mode: 0644
+    mode: 0600
 
 - name: Clone powerlevel10k/powerlevel10k # noqa: latest
   ansible.builtin.git:
