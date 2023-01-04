@@ -1,0 +1,14 @@
+- name: Install Development Tools
+  kewlfft.aur.aur:
+    name:
+      - jetbrains-toolbox
+      - visual-studio-code-bin
+  become_user: aur_builder
+  when: ansible_pkg_mgr == "pacman"
+
+- name: Install nvm from aur
+  kewlfft.aur.aur:
+    name: nvm
+  become_user: aur_builder
+  when: ansible_pkg_mgr == "pacman" and "nvm" in packages
+  notify: 'generate zshrc'

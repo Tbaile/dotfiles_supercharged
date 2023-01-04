@@ -8,3 +8,7 @@
 - name: Setup GNUPG
   ansible.builtin.import_tasks: gnupg.yml
   tags: gnupg
+
+- name: Install Software
+  ansible.builtin.import_tasks: software.yml
+  tags: software
