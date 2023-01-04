@@ -12,6 +12,7 @@
   register: gpg_key
   changed_when: gpg_key.rc == 1
   failed_when: gpg_key.rc > 1
+  check_mode: false
   notify: 'import gpg keys'
   loop:
     - "91CCDCB31830CD1B220E562808EC00F294397A62$"
