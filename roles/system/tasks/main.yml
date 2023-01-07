@@ -86,3 +86,18 @@
           kewlfft.aur.aur:
             name: yay-bin
           become_user: aur_builder
+
+        - name: Install reflector
+          community.general.pacman:
+            name: reflector
+
+        - name: Copy reflector config
+          ansible.builtin.copy:
+            src: etc/xdg/reflector/reflector.conf
+            dest: /etc/xdg/reflector/reflector.conf
+            mode: 0600
+
+        - name: Enable reflector timer
+          ansible.builtin.systemd:
+            name: reflector.timer
+            enabled: true
