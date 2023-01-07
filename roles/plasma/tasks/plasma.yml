@@ -13,6 +13,7 @@
           - ttf-joypixels
           - ttf-dejavu
           - noto-fonts
+          - latte-dock
 
     - name: Install optional application deps as deps
       community.general.pacman:
@@ -90,3 +91,9 @@
         mode: 0644
         no_extra_spaces: true
       loop: "{{ keybindings }}"
+
+    - name: Copy Desktop Configuration
+      ansible.builtin.copy:
+        src: "config/plasma-org.kde.plasma.desktop-appletsrc"
+        dest: "/home/{{ ansible_user_id }}/.config/plasma-org.kde.plasma.desktop-appletsrc"
+        mode: 0600
