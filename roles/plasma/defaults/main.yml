@@ -1,3 +1,5 @@
+sddm_service: sddm-plymouth.service
+
 keybindings:
   - { option: "Switch One Desktop Down", value: "Meta+Ctrl+Down,Meta+Ctrl+Down,Switch One Desktop Down" }
   - { option: "Switch One Desktop Up", value: "Meta+Ctrl+Up,Meta+Ctrl+Up,Switch One Desktop Up" }

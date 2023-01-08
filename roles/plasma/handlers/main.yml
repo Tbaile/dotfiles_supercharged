@@ -1,6 +1,7 @@
 - name: Restart SDDM
-  ansible.builtin.debug:
-    msg: "You'll need to restart SDDM to apply the changes."
+  ansible.builtin.systemd:
+    name: "{{ sddm_service }}"
+    state: restarted
   listen: 'restart sddm'
 
 - name: Restart libinput-gestures
