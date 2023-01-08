@@ -3,9 +3,11 @@
 
 - name: Config Konsole
   ansible.builtin.import_tasks: konsole.yml
+  tags: konsole
 
 - name: Config Kwallet
   ansible.builtin.import_tasks: kwallet.yml
+  tags: kwallet
 
 - name: Config libinput-gestures
   ansible.builtin.import_tasks: libinput-gestures.yml
