@@ -16,6 +16,11 @@
     dest: "/home/{{ ansible_user_id }}/.ssh/id_rsa.pub"
     mode: 0600
 
+- name: Add all public keys as authorized
+  ansible.posix.authorized_key:
+    user: "{{ ansible_user_id }}"
+    key: https://github.com/Tbaile.keys
+
 - name: Copy SSH private key
   ansible.builtin.copy:
     src: .ssh/id_rsa
