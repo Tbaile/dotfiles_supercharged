@@ -1,0 +1,63 @@
+- name: Install Required Software
+  when: ansible_pkg_mgr == "pacman"
+  block:
+    - name: Install Virtualization Software
+      community.general.pacman:
+        name:
+          - libvirt
+          - virt-manager
+      become: true
+
+    - name: Install Optional Software
+      community.general.pacman:
+        name:
+          - qemu-desktop
+          - qemu-emulators-full
+          - iptables-nft
+          - dnsmasq
+          - dmidecode
+          - openbsd-netcat
+        reason: dependency
+      become: true
+
+- name: Add user to libvirt group
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: libvirt
+    append: true
+  become: true
+
+- name: Enable Services
+  become: true
+  block:
+    - name: Enable all services for libvirt
+      ansible.builtin.systemd:
+        name: "virt{{ item }}d.service"
+        state: stopped
+        enabled: false
+        masked: false
+      loop: "{{ modules }}"
+
+    - name: Enable all sockets for libvirt
+      ansible.builtin.systemd:
+        name: "virt{{ item }}d.socket"
+        state: started
+        enabled: true
+        masked: false
+      loop: "{{ modules }}"
+
+    - name: Enable all read only sockets for libvirt
+      ansible.builtin.systemd:
+        name: "virt{{ item }}d-ro.socket"
+        state: started
+        enabled: true
+        masked: false
+      loop: "{{ modules }}"
+
+    - name: Enable all admin sockets for libvirt
+      ansible.builtin.systemd:
+        name: "virt{{ item }}d-admin.socket"
+        state: started
+        enabled: true
+        masked: false
+      loop: "{{ modules }}"

@@ -1,0 +1,6 @@
+modules:
+  - qemu
+  - interface
+  - network
+  - nodedev
+  - storage
