@@ -2,3 +2,8 @@
   ansible.builtin.debug:
     msg: "You'll need to restart SDDM to apply the changes."
   listen: 'restart sddm'
+
+- name: Restart libinput-gestures
+  ansible.builtin.command:
+    cmd: libinput-gestures-setup restart
+  listen: 'restart libinput-gestures'

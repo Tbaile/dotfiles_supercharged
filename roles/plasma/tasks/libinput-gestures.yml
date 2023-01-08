@@ -1,0 +1,36 @@
+- name: Setup libinput gestures on arch
+  when: ansible_pkg_mgr == "pacman"
+  block:
+    - name: Install libinput-gestures
+      kewlfft.aur.aur:
+        name: libinput-gestures
+      become_user: aur_builder
+
+    - name: Install optional dependencies
+      community.general.pacman:
+        name:
+          - xdotool
+          - wmctrl
+        reason: dependency
+      become: true
+
+- name: Add user to input group
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups:
+      - input
+    append: true
+  become: true
+
+- name: Copy configuration
+  ansible.builtin.copy:
+    src: config/libinput-gestures.conf
+    dest: /home/{{ ansible_user_id }}/.config/libinput-gestures.conf
+    mode: 0644
+  notify: 'restart libinput-gestures'
+
+- name: Enable autostart of libinput
+  ansible.builtin.copy:
+    src: config/autostart/libinput-gestures.desktop
+    dest: /home/{{ ansible_user_id }}/.config/autostart/libinput-gestures.desktop
+    mode: 0644

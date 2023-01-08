@@ -6,3 +6,7 @@
 
 - name: Config Kwallet
   ansible.builtin.import_tasks: kwallet.yml
+
+- name: Config libinput-gestures
+  ansible.builtin.import_tasks: libinput-gestures.yml
+  tags: libinput-gestures
