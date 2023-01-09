@@ -9,3 +9,10 @@
   ansible.builtin.command:
     cmd: libinput-gestures-setup restart
   listen: 'restart libinput-gestures'
+
+- name: Restart logiops
+  ansible.builtin.systemd:
+    name: logid.service
+    state: restarted
+  become: true
+  listen: 'restart logiops'

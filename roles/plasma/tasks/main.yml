@@ -12,3 +12,7 @@
 - name: Config libinput-gestures
   ansible.builtin.import_tasks: libinput-gestures.yml
   tags: libinput-gestures
+
+- name: Config logiops
+  ansible.builtin.import_tasks: logiops.yml
+  tags: logiops

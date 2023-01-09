@@ -1,0 +1,21 @@
+- name: Configure logiops
+  become: true
+  block:
+    - name: Install logiops
+      kewlfft.aur.aur:
+        name: logiops
+      become_user: aur_builder
+      when: ansible_pkg_mgr == "pacman"
+
+    - name: Copy logiops configuration
+      ansible.builtin.copy:
+        src: logid.cfg
+        dest: /etc/logid.cfg
+        mode: 0644
+      notify: 'restart logiops'
+
+    - name: Enable logiops service
+      ansible.builtin.systemd:
+        name: logid.service
+        enabled: true
+        state: started
