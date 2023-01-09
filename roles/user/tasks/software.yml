@@ -16,4 +16,12 @@
         name:
           - github-cli
           - telegram-desktop
+          - mattermost-desktop
+      become: true
+
+    - name: Install optional dependencies
+      community.general.pacman:
+        name:
+          - libappindicator-gtk3
+        reason: dependency
       become: true
