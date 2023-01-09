@@ -1,0 +1,13 @@
+- name: Setup Laptop
+  become: true
+  block:
+    - name: Install TLP
+      community.general.pacman:
+        name:
+          - tlp
+
+    - name: Enable TLP service
+      ansible.builtin.systemd:
+        name: tlp.service
+        enabled: true
+        state: started

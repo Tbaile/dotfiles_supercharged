@@ -1,0 +1,3 @@
+- name: XPS 15 9500 Setup
+  ansible.builtin.import_tasks: xps159500.yml
+  when: ansible_product_name == "XPS 15 9500"

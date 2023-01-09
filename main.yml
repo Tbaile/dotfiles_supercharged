@@ -3,6 +3,8 @@
   roles:
     - role: system
       tags: system
+    - role: machine
+      tags: machine
     - role: plasma
       tags: plasma
     - role: user
