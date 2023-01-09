@@ -2,6 +2,7 @@
   ansible.builtin.systemd:
     name: "{{ sddm_service }}"
     state: restarted
+  become: true
   listen: 'restart sddm'
 
 - name: Restart libinput-gestures

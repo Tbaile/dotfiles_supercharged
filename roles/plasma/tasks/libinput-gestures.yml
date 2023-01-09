@@ -1,5 +1,6 @@
 - name: Setup libinput gestures on arch
   when: ansible_pkg_mgr == "pacman"
+  become: true
   block:
     - name: Install libinput-gestures
       kewlfft.aur.aur:
@@ -12,7 +13,6 @@
           - xdotool
           - wmctrl
         reason: dependency
-      become: true
 
 - name: Add user to input group
   ansible.builtin.user:
