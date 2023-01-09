@@ -87,9 +87,16 @@
             name: yay-bin
           become_user: aur_builder
 
-        - name: Install reflector
+    - name: Arch Specific Setup
+      when: ansible_os_family == "Archlinux"
+      become: true
+      block:
+        - name: Install system helper packages
           community.general.pacman:
-            name: reflector
+            name:
+              - pacman-contrib
+              - util-linux
+              - reflector
 
         - name: Copy reflector config
           ansible.builtin.copy:
@@ -100,4 +107,14 @@
         - name: Enable reflector timer
           ansible.builtin.systemd:
             name: reflector.timer
+            enabled: true
+
+        - name: Enable paccache timer
+          ansible.builtin.systemd:
+            name: paccache.timer
+            enabled: true
+
+        - name: Enable fstrim timer
+          ansible.builtin.systemd:
+            name: fstrim.timer
             enabled: true
