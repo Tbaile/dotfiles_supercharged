@@ -1,15 +1,10 @@
-- name: Konsole required software
+- name: Install konsole and fonts
   when: ansible_pkg_mgr == "pacman"
   become: true
-  block:
-    - name: Install konsole
-      community.general.pacman:
-        name: konsole
-
-    - name: Install nerd-fonts-meslo from aur
-      kewlfft.aur.aur:
-        name: nerd-fonts-meslo
-      become_user: aur_builder
+  community.general.pacman:
+    name:
+      - konsole
+      - ttf-meslo-nerd
 
 - name: Set folder structure
   ansible.builtin.file:
