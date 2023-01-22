@@ -12,6 +12,9 @@
     dest: "/home/{{ ansible_user_id }}/.oh-my-zsh"
     depth: 1
 
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+
 - name: Copy OhMyZsh Configuration
   ansible.builtin.template:
     src: .zshrc.j2

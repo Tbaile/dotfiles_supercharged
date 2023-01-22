@@ -31,7 +31,7 @@ export GPG_TTY=$(tty)
 # Source powerlevel10k configuration.
 source ~/.p10k.zsh
 
-{% if ansible_pkg_mgr == "pacman" %}
+{% if ansible_facts.packages['nvm'] is defined and ansible_pkg_mgr == "pacman" %}
 # Source NVM
 source /usr/share/nvm/init-nvm.sh
 {% endif %}
