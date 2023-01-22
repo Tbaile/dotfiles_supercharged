@@ -5,8 +5,8 @@
       tags: system
     - role: machine
       tags: machine
-    - role: plasma
-      tags: plasma
+    - role: desktop_environment
+      tags: desktop_environment
     - role: user
       tags: user
     - role: docker
