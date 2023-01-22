@@ -1,6 +1,8 @@
 sddm_service: sddm-plymouth.service
 
 keybindings:
+  - { option: "Window to Next Screen", value: "Meta+Shift+Right,Meta+Shift+Right,Window to Next Screen" }
+  - { option: "Window to Previous Screen", value: "Meta+Shift+Left,Meta+Shift+Left,Window to Previous Screen" }
   - { option: "Switch One Desktop Down", value: "Meta+Ctrl+Down,Meta+Ctrl+Down,Switch One Desktop Down" }
   - { option: "Switch One Desktop Up", value: "Meta+Ctrl+Up,Meta+Ctrl+Up,Switch One Desktop Up" }
   - { option: "Switch One Desktop to the Left", value: "Meta+Ctrl+Left,Meta+Ctrl+Left,Switch One Desktop to the Left" }
