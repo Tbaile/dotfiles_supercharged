@@ -22,15 +22,15 @@
     append: true
   become: true
 
+- name: Enable autostart of libinput
+  ansible.builtin.copy:
+    src: config/autostart/libinput-gestures.desktop
+    dest: /home/{{ ansible_user_id }}/.config/autostart/libinput-gestures.desktop
+    mode: 0644
+
 - name: Copy configuration
   ansible.builtin.copy:
     src: config/libinput-gestures.conf
     dest: /home/{{ ansible_user_id }}/.config/libinput-gestures.conf
     mode: 0644
   notify: 'restart libinput-gestures'
-
-- name: Enable autostart of libinput
-  ansible.builtin.copy:
-    src: config/autostart/libinput-gestures.desktop
-    dest: /home/{{ ansible_user_id }}/.config/autostart/libinput-gestures.desktop
-    mode: 0644
