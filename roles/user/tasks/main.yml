@@ -12,3 +12,6 @@
 - name: Install Software
   ansible.builtin.import_tasks: software.yml
   tags: software
+
+- name: Setup Virtualization
+  ansible.builtin.import_tasks: virtualization.yml

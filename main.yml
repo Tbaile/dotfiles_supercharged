@@ -11,5 +11,3 @@
       tags: user
     - role: docker
       tags: docker
-    - role: virtualization
-      tags: virtualization
