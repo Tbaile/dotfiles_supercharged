@@ -1,3 +1,11 @@
 - name: Install Docker
   ansible.builtin.import_tasks: docker.yml
   tags: docker
+
+- name: Install Libvirt
+  ansible.builtin.import_tasks: virtualization.yml
+  tags: virtualization
+
+- name: Install General Software
+  ansible.builtin.import_tasks: software.yml
+  tags: software
