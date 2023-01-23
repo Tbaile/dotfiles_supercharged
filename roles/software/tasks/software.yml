@@ -9,6 +9,7 @@
           - jetbrains-toolbox
           - visual-studio-code-bin
           - nvm
+          - miniconda3
       become: true
       become_user: aur_builder
 
