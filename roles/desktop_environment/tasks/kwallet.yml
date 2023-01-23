@@ -22,6 +22,7 @@
   loop:
     - ".gnupg"
     - ".config/environment.d"
+    - ".config/autostart"
 
 - name: Copy files
   ansible.builtin.copy:
