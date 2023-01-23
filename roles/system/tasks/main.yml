@@ -82,6 +82,11 @@
             mode: 0600
             validate: 'visudo -cf %s'
 
+        - name: Install base devel
+          community.general.pacman:
+            name:
+              - base-devel
+
         - name: Install AUR package manager
           kewlfft.aur.aur:
             name: yay-bin
