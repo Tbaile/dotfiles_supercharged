@@ -1,5 +1,6 @@
 - name: Provision Workstation
   hosts: localhost
+  force_handlers: true
   roles:
     - role: system
       tags: system
@@ -7,7 +8,7 @@
       tags: machine
     - role: desktop_environment
       tags: desktop_environment
-    - role: user
-      tags: user
     - role: software
       tags: software
+    - role: user
+      tags: user
