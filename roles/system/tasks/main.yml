@@ -66,6 +66,16 @@
         mode: 0600
         validate: "visudo -cf %s"
 
+    - name: Add personal user
+      ansible.builtin.user:
+        name: "{{ user.name }}"
+        comment: "{{ user.comment }}"
+        password: "{{ user.password | password_hash('sha512') }}"
+        update_password: on_create
+        append: true
+        groups:
+          - wheel
+
     - name: Pacman Specific Setup
       when: ansible_pkg_mgr == "pacman"
       block:

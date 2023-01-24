@@ -1,2 +1,7 @@
 hostname: <hostname>
 pretty_hostname: <pretty hostname, if applied>
+
+user:
+  name: <username>
+  comment: <comment of user>
+  password: <password, will be automatically hashed>
