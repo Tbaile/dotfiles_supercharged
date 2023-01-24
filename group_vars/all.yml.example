@@ -1,4 +1,2 @@
-system:
-  hostname: <hostname>
-  pretty_hostname: <pretty name>
-  keymap: <keymap for vconsole>
+hostname: <hostname>
+pretty_hostname: <pretty name>

@@ -1,0 +1,4 @@
+timezone: Europe/Rome
+keymap: it
+laptop: false
+aur_helper: aur_builder

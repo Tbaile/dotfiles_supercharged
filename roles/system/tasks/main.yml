@@ -1,5 +1,4 @@
 - name: Root operations
-  become: true
   block:
     - name: Install prerequisite packages
       community.general.pacman:
@@ -10,22 +9,22 @@
 
     - name: Set Hostname
       ansible.builtin.hostname:
-        name: "{{ system.hostname }}"
-      when: system.hostname is defined
+        name: "{{ hostname }}"
+      when: hostname is defined
 
     - name: Set time zone
       community.general.timezone:
-        name: Europe/Rome
+        name: "{{ timezone }}"
       notify:
         - "sync time"
 
     - name: Set vconsole keymap
       ansible.builtin.lineinfile:
         path: /etc/vconsole.conf
-        line: "KEYMAP={{ system.keymap }}"
+        line: "KEYMAP={{ keymap }}"
         create: true
         mode: 0644
-      when: system.keymap is defined
+      when: keymap is defined
 
     - name: Ensure locale is present
       community.general.locale_gen:
@@ -45,10 +44,10 @@
         path: /etc/machine-info
         section: null
         option: PRETTY_HOSTNAME
-        value: "{{ system.pretty_hostname }}"
+        value: "{{ pretty_hostname }}"
         mode: 0644
         no_extra_spaces: true
-      when: system.pretty_hostname is defined
+      when: pretty_hostname is defined
 
     - name: Increase number of login tries to 10
       ansible.builtin.lineinfile:
@@ -61,26 +60,28 @@
 
     - name: Wheel group can use sudo
       ansible.builtin.lineinfile:
-        path: /etc/sudoers
+        path: /etc/sudoers.d/wheel-sudo
         line: "%wheel ALL=(ALL:ALL) ALL"
+        create: true
+        mode: 0600
         validate: "visudo -cf %s"
 
     - name: Pacman Specific Setup
       when: ansible_pkg_mgr == "pacman"
       block:
-        - name: Create aur_builder
+        - name: Create aur helper
           ansible.builtin.user:
-            name: aur_builder
-            comment: Ansible AUR helper
+            name: "{{ aur_helper }}"
+            comment: Ansible AUR Helper
             system: true
 
-        - name: Allow aur_builder to run passwordless pacman
+        - name: Allow aur helper to run passwordless pacman
           ansible.builtin.lineinfile:
-            path: /etc/sudoers.d/aur_builder-allow-to-sudo-pacman
-            line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+            path: /etc/sudoers.d/aur_helper-allow-to-sudo-pacman
+            line: "{{ aur_helper }} ALL=(ALL) NOPASSWD: /usr/bin/pacman"
             create: true
             mode: 0600
-            validate: 'visudo -cf %s'
+            validate: "visudo -cf %s"
 
         - name: Install base devel
           community.general.pacman:
@@ -90,11 +91,11 @@
         - name: Install AUR package manager
           kewlfft.aur.aur:
             name: yay-bin
-          become_user: aur_builder
+          become: true
+          become_user: "{{ aur_helper }}"
 
     - name: Arch Specific Setup
       when: ansible_os_family == "Archlinux"
-      become: true
       block:
         - name: Install system helper packages
           community.general.pacman:
@@ -110,16 +111,19 @@
             mode: 0600
 
         - name: Enable reflector timer
-          ansible.builtin.systemd:
+          ansible.builtin.service:
             name: reflector.timer
             enabled: true
+            state: started
 
         - name: Enable paccache timer
           ansible.builtin.systemd:
             name: paccache.timer
             enabled: true
+            state: started
 
         - name: Enable fstrim timer
           ansible.builtin.systemd:
             name: fstrim.timer
             enabled: true
+            state: started
