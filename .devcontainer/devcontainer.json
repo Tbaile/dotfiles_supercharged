@@ -15,12 +15,13 @@
 			"settings": {
 				"files.associations": {
 					"**/group_vars/**/*.yml": "ansible",
+					"**/host_vars/**/*yml": "ansible",
 					"**/roles/**/*.yml": "ansible",
 					"main.yml": "ansible"
 				}
 			}
 		}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -29,7 +30,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "python --version",
+	"postCreateCommand": "ansible-galaxy collection install -r roles/requirements.yml"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
