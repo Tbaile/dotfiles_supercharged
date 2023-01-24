@@ -3,14 +3,12 @@
     name:
       - tlp
   when: ansible_pkg_mgr == "pacman"
-  become: true
 
 - name: Enable TLP service
-  ansible.builtin.systemd:
-    name: tlp.service
+  ansible.builtin.service:
+    name: tlp
     enabled: true
     state: started
-  become: true
 
 - name: Disable rfkill services
   ansible.builtin.systemd:
@@ -18,7 +16,6 @@
     enabled: false
     state: stopped
     masked: true
-  become: true
   loop:
     - systemd-rfkill.service
     - systemd-rfkill.socket

@@ -1,7 +1,7 @@
 - name: Restart Pulseaudio
   ansible.builtin.command:
     cmd: "{{ item }}"
-  listen: 'restart pulseaudio'
+  listen: "restart pulseaudio"
   loop:
     - pulseaudio -k
     - pulseaudio --start

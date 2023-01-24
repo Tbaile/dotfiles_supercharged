@@ -1,16 +1,13 @@
-- name: Import common laptop config
-  ansible.builtin.import_tasks: laptop.yml
-
 - name: Fingerprint Installation
   when: ansible_pkg_mgr == "pacman"
-  become: true
   block:
     - name: Fingerprint drivers
       kewlfft.aur.aur:
         name:
           - libfprint-tod-git
           - libfprint-2-tod1-xps9300-bin
-      become_user: aur_builder
+      become: true
+      become_user: "{{ aur_helper }}"
 
     - name: Fingerprint software
       community.general.pacman:
@@ -20,29 +17,25 @@
 
 - name: Add user to input group
   ansible.builtin.user:
-    name: "{{ ansible_user_id }}"
+    name: "{{ user.name }}"
     groups:
       - input
     append: true
-  become: true
 
 - name: Install PulseAudio
-  when: ansible_pkg_mgr == "pacman"
   community.general.pacman:
     name: pulseaudio
-  become: true
+  when: ansible_pkg_mgr == "pacman"
 
 - name: Add Pulseaudio config folder
   ansible.builtin.file:
     path: /etc/pulse/default.pa.d
     state: directory
     mode: 0755
-  become: true
 
 - name: Add Microphone Cancellation
   ansible.builtin.copy:
     src: noise-cancellation.pa
     dest: /etc/pulse/default.pa.d/noise-cancellation.pa
     mode: 0644
-  become: true
-  notify: 'restart pulseaudio'
+  notify: "restart pulseaudio"
