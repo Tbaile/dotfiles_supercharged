@@ -1,0 +1,49 @@
+- name: SSH key generation
+  community.crypto.openssh_keypair:
+    path: "/home/{{ ansible_user_id }}/.ssh/id_{{ ssh_type }}"
+    type: "{{ ssh_type }}"
+    passphrase: "{{ ssh_key_password }}"
+  notify: ssh key generated
+  when: ssh_key_password is defined
+
+- name: Ensure user Systemd directory exists
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/.config/{{ item }}"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0700"
+  loop:
+    - systemd/user
+    - environment.d
+
+- name: Add systemd environment file
+  ansible.builtin.copy:
+    src: .config/environment.d/ssh-agent.conf
+    dest: "/home/{{ ansible_user_id }}/.config/environment.d/ssh-agent.conf"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0600"
+
+- name: Install SSH Agent Service
+  ansible.builtin.copy:
+    src: .config/systemd/user/ssh-agent.service
+    dest: "/home/{{ ansible_user_id }}/.config/systemd/user/ssh-agent.service"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0600"
+  notify: restart ssh agent
+
+- name: Enable and start SSH Agent Service
+  ansible.builtin.systemd:
+    name: ssh-agent
+    state: started
+    enabled: true
+    scope: user
+
+- name: Install ksshaskpass
+  become: true
+  become_user: root
+  ansible.builtin.dnf:
+    name:
+      - ksshaskpass

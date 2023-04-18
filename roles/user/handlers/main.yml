@@ -1,0 +1,15 @@
+- name: Upload SSH key to GitHub
+  community.general.github_key:
+    name: Tommaso's XPS
+    token: "{{ github_ssh_token }}"
+    pubkey: "{{ lookup('file', '/home/' + ansible_user_id + '/.ssh/id_' + ssh_type + '.pub') }}"
+  listen: ssh key generated
+  when: github_ssh_token is defined
+
+- name: Restart SSH agent
+  ansible.builtin.systemd:
+    name: ssh-agent
+    state: restarted
+    scope: user
+    daemon_reload: true
+  listen: restart ssh agent

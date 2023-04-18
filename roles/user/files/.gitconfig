@@ -1,0 +1,14 @@
+[user]
+    name = Tommaso Bailetti
+    email = bailetti.tommaso@gmail.com
+    signingkey = 91CCDCB31830CD1B220E562808EC00F294397A62
+[core]
+    editor = vim
+[commit]
+    gpgsign = true
+[pull]
+    rebase = false
+[init]
+    defaultBranch = master
+[fetch]
+    prune = true

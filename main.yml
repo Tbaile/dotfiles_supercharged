@@ -6,3 +6,5 @@
       tags: system
     - role: machine
       tags: machine
+    - role: user
+      tags: user
