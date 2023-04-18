@@ -10,3 +10,5 @@
       tags: user
     - role: desktop_environment
       tags: desktop_environment
+    - role: software
+      tags: software

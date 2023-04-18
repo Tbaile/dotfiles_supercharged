@@ -1,0 +1,51 @@
+- name: Docker
+  become: true
+  become_user: root
+  block:
+    - name: Add Docker Repository
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/fedora/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        mode: "0644"
+        owner: root
+        group: root
+        checksum: sha256:d19388de1ab46e0547d04c576014bc857a60cd4d5ff37f50709b8337c88672a9
+
+    - name: Install Docker
+      ansible.builtin.dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        update_cache: true
+
+    - name: Add Docker User
+      ansible.builtin.group:
+        name: docker
+
+    - name: Add current user to Docker group
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        groups: docker
+        append: true
+
+    - name: Enable Docker Service
+      ansible.builtin.service:
+        name: docker.socket
+        enabled: true
+        state: started
+
+- name: Login with docker
+  community.docker.docker_login:
+    username: tbaile
+    password: "{{ docker_registry_password }}"
+  when: docker_registry_password is defined
+
+- name: Login to ghcr.io
+  community.docker.docker_login:
+    registry_url: https://ghcr.io
+    username: tbaile
+    password: "{{ github_registry_password }}"
+  when: github_registry_password is defined

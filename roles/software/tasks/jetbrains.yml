@@ -1,0 +1,27 @@
+- name: Check installation of Jetbrains Toolbox
+  ansible.builtin.stat:
+    path: "/home/{{ ansible_user_id }}/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox"
+  register: jetbrains_toolbox_installed
+
+- name: Download Jetbrains Toolbox
+  ansible.builtin.get_url:
+    url: https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.27.3.14493.tar.gz
+    checksum: sha256:3832e6a7a9fa2e217f570782795ea2be8a57922e4391bc7ddb0aba1b7bbf8a8b
+    dest: /tmp/jetbrains-toolbox-1.27.3.14493.tar.gz
+    mode: "0755"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+  when: not jetbrains_toolbox_installed.stat.exists
+
+- name: Extract JetBrains toolbox
+  ansible.builtin.unarchive:
+    src: /tmp/jetbrains-toolbox-1.27.3.14493.tar.gz
+    dest: /tmp
+    remote_src: true
+  when: not jetbrains_toolbox_installed.stat.exists
+
+- name: Install JetBrains toolbox
+  ansible.builtin.command:
+    cmd: /tmp/jetbrains-toolbox-1.27.3.14493/jetbrains-toolbox
+    creates: "/home/{{ ansible_user_id }}/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox"
+  when: not jetbrains_toolbox_installed.stat.exists

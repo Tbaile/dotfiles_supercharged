@@ -1,0 +1,23 @@
+- name: Chrome
+  become: true
+  become_user: root
+  block:
+    - name: Install Workstation Repositories
+      ansible.builtin.dnf:
+        name:
+          - fedora-workstation-repositories
+
+    - name: Enable Google Chrome Repository
+      community.general.ini_file:
+        path: /etc/yum.repos.d/google-chrome.repo
+        section: google-chrome
+        option: enabled
+        value: 1
+        no_extra_spaces: true
+        create: false
+
+    - name: Install Google Chrome
+      ansible.builtin.dnf:
+        name:
+          - google-chrome-stable
+        update_cache: true

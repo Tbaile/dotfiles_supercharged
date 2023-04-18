@@ -1,0 +1,17 @@
+- name: VSCode
+  become: true
+  become_user: root
+  block:
+    - name: Copy VSCode Repo
+      ansible.builtin.copy:
+        src: files/vscode.repo
+        dest: /etc/yum.repos.d/vscode.repo
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Install VSCode
+      ansible.builtin.dnf:
+        name:
+          - code
+        update_cache: true

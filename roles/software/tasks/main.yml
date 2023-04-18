@@ -1,0 +1,41 @@
+- name: Install Distro Software
+  become: true
+  become_user: root
+  ansible.builtin.dnf:
+    name:
+      - ark
+      - kate
+      - plasma-browser-integration
+      - usbmuxd
+      - libimobiledevice
+
+- name: Install Docker
+  ansible.builtin.import_tasks: docker.yml
+  tags: docker
+
+- name: Install Chrome
+  ansible.builtin.import_tasks: chrome.yml
+
+- name: Install VSCode
+  ansible.builtin.import_tasks: chrome.yml
+
+- name: Install Jetbrains
+  ansible.builtin.import_tasks: jetbrains.yml
+  tags: jetbrains
+
+- name: Install Software via DNF
+  become: true
+  become_user: root
+  ansible.builtin.dnf:
+    name:
+      - vim
+      - telegram-desktop
+      - yubikey-manager-qt
+      - yubioath-desktop
+      - libreoffice
+
+- name: Install Software via flatpak
+  community.general.flatpak:
+    name:
+      - com.spotify.Client
+      - com.mattermost.Desktop
