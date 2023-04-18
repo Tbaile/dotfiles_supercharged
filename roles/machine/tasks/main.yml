@@ -1,0 +1,28 @@
+- name: Power management
+  become: true
+  become_user: root
+  block:
+    - name: Uninstall power-profiles-daemon
+      ansible.builtin.dnf:
+        name:
+          - power-profiles-daemon
+        state: removed
+
+    - name: Install TLP
+      ansible.builtin.dnf:
+        name:
+          - tlp
+
+    - name: Enable TLP
+      ansible.builtin.service:
+        name: tlp
+        state: started
+        enabled: true
+
+    - name: Mask rfkill
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: true
+      loop:
+        - systemd-rfkill.service
+        - systemd-rfkill.socket

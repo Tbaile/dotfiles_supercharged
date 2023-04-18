@@ -4,3 +4,5 @@
   roles:
     - role: system
       tags: system
+    - role: machine
+      tags: machine
