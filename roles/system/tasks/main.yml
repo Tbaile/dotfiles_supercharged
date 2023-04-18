@@ -1,0 +1,37 @@
+- name: Sudo Operations
+  become: true
+  become_user: root
+  block:
+    - name: Start NTP
+      ansible.builtin.service:
+        name: chronyd
+        enabled: true
+        state: started
+
+    - name: Set System Locales
+      community.general.ini_file:
+        path: /etc/locale.conf
+        section: null
+        option: "{{ item.key }}"
+        value: "{{ item.value }}"
+        mode: "0644"
+        no_extra_spaces: true
+      loop:
+        - { key: LANG, value: en_US.UTF-8 }
+        - { key: LC_ADDRESS, value: it_IT.UTF-8 }
+        - { key: LC_MEASUREMENT, value: it_IT.UTF-8 }
+        - { key: LC_MONETARY, value: it_IT.UTF-8 }
+        - { key: LC_NAME, value: it_IT.UTF-8 }
+        - { key: LC_NUMERIC, value: it_IT.UTF-8 }
+        - { key: LC_PAPER, value: it_IT.UTF-8 }
+        - { key: LC_TELEPHONE, value: it_IT.UTF-8 }
+        - { key: LC_TIME, value: it_IT.UTF-8 }
+
+    - name: Set Machine Info
+      community.general.ini_file:
+        path: /etc/machine-info
+        section: null
+        option: PRETTY_HOSTNAME
+        value: Tommaso's XPS
+        mode: "0644"
+        no_extra_spaces: true

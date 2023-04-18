@@ -1,0 +1,6 @@
+- name: Setup System
+  hosts: localhost
+  force_handlers: true
+  roles:
+    - role: system
+      tags: system
