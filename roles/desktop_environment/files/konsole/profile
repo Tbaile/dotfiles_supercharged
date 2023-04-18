@@ -1,0 +1,8 @@
+[Appearance]
+ColorScheme=Breeze
+Font=MesloLGM Nerd Font Mono,11,-1,5,50,0,0,0,0,0
+
+[General]
+Command=/bin/zsh
+Name=Tommaso
+Parent=FALLBACK/

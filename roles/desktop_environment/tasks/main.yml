@@ -1,0 +1,88 @@
+- name: Set Locales for KDE
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/plasma-localerc"
+    section: Formats
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    mode: "0644"
+    no_extra_spaces: true
+  loop:
+    - { key: LANG, value: en_US.UTF-8 }
+    - { key: LC_ADDRESS, value: it_IT.UTF-8 }
+    - { key: LC_MEASUREMENT, value: it_IT.UTF-8 }
+    - { key: LC_MONETARY, value: it_IT.UTF-8 }
+    - { key: LC_NAME, value: it_IT.UTF-8 }
+    - { key: LC_NUMERIC, value: it_IT.UTF-8 }
+    - { key: LC_PAPER, value: it_IT.UTF-8 }
+    - { key: LC_TELEPHONE, value: it_IT.UTF-8 }
+    - { key: LC_TIME, value: it_IT.UTF-8 }
+
+- name: Set global configuration
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/kdeglobals"
+    section: KDE
+    option: SingleClick
+    value: false
+    mode: "0600"
+    no_extra_spaces: true
+
+- name: Set virtual Desktops
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/kwinrc"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0600"
+    no_extra_spaces: true
+  loop:
+    - { section: "Desktops", option: "Number", value: "6" }
+    - { section: "Desktops", option: "Rows", value: "2" }
+    - { section: "Windows", option: "RollOverDesktops", value: "true" }
+
+- name: Set Default shutdown option
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/ksmserverrc"
+    section: General
+    option: shutdownType
+    value: 2
+    mode: "0600"
+    no_extra_spaces: true
+
+- name: Set kwin Keybindings
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/kglobalshortcutsrc"
+    section: kwin
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0600"
+    no_extra_spaces: true
+  loop:
+    - { option: "Window to Next Screen", value: "Meta+Shift+Right,Meta+Shift+Right,Window to Next Screen" }
+    - { option: "Window to Previous Screen", value: "Meta+Shift+Left,Meta+Shift+Left,Window to Previous Screen" }
+    - { option: "Switch One Desktop Down", value: "Meta+Ctrl+Down,Meta+Ctrl+Down,Switch One Desktop Down" }
+    - { option: "Switch One Desktop Up", value: "Meta+Ctrl+Up,Meta+Ctrl+Up,Switch One Desktop Up" }
+    - { option: "Switch One Desktop to the Left", value: "Meta+Ctrl+Left,Meta+Ctrl+Left,Switch One Desktop to the Left" }
+    - { option: "Switch One Desktop to the Right", value: "Meta+Ctrl+Right,Meta+Ctrl+Right,Switch One Desktop to the Right" }
+    - { option: "Window One Desktop Down", value: "Meta+Ctrl+Shift+Down,Meta+Ctrl+Shift+Down,Window One Desktop Down" }
+    - { option: "Window One Desktop Up", value: "Meta+Ctrl+Shift+Up,Meta+Ctrl+Shift+Up,Window One Desktop Up" }
+    - { option: "Window One Desktop to the Left", value: "Meta+Ctrl+Shift+Left,Meta+Ctrl+Shift+Left,Window One Desktop to the Left" }
+    - { option: "Window One Desktop to the Right", value: "Meta+Ctrl+Shift+Right,Meta+Ctrl+Shift+Right,Window One Desktop to the Right" }
+
+- name: Setup Klipper
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/klipperrc"
+    section: General
+    option: MaxClipItems
+    value: 2000
+    mode: "0600"
+    no_extra_spaces: true
+
+- name: Setup Konsole
+  ansible.builtin.import_tasks: konsole.yml
+
+- name: Setup logiops
+  ansible.builtin.import_tasks: logiops.yml
+
+- name: Setup touchegg
+  ansible.builtin.import_tasks: touchegg.yml
+  tags: touchegg

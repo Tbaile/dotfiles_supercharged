@@ -1,0 +1,7 @@
+- name: Restart logiops
+  become: true
+  become_user: root
+  ansible.builtin.service:
+    name: logid.service
+    state: restarted
+  listen: restart logiops

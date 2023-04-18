@@ -8,3 +8,5 @@
       tags: machine
     - role: user
       tags: user
+    - role: desktop_environment
+      tags: desktop_environment

@@ -1,0 +1,30 @@
+- name: Setup Touchegg
+  become: true
+  become_user: root
+  block:
+    - name: Install Touchegg
+      ansible.builtin.dnf:
+        name:
+          - touchegg
+
+    - name: Start Touchegg service
+      ansible.builtin.service:
+        name: touchegg
+        state: started
+        enabled: true
+
+- name: Create Touchegg configuration directory
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/.config/touchegg"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0755"
+
+- name: Copy Touchegg configuration
+  ansible.builtin.copy:
+    src: touchegg.xml
+    dest: "/home/{{ ansible_user_id }}/.config/touchegg/touchegg.conf"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0644"

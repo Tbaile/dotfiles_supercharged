@@ -1,0 +1,50 @@
+- name: Root setup
+  become: true
+  become_user: root
+  block:
+    - name: Create Meslo Directory
+      ansible.builtin.file:
+        path: /usr/share/fonts/MesloNerdFont
+        state: directory
+        mode: "0755"
+
+    - name: Install Meslo Nerd Font
+      ansible.builtin.get_url:
+        url: https://github.com/ryanoasis/nerd-fonts/raw/bd93a872a6af6e90ee7a95106bce092bef495a11/
+          patched-fonts/Meslo/L/Regular/complete/Meslo%20LG%20L%20Regular%20Nerd%20Font%20Complete%20Mono.ttf
+        dest: /usr/share/fonts/MesloNerdFont/Meslo LG L Regular Nerd Font Complete Mono.ttf
+        mode: "0644"
+        checksum: sha256:166b42c482f10719b0f23fdf463d94ae952cdd800d03c5748a5416e662cad596
+
+- name: Set folder structure
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/{{ item }}"
+    state: directory
+    mode: "0700"
+  loop:
+    - ".local/share/konsole"
+    - ".config"
+
+- name: Copy default profile
+  ansible.builtin.copy:
+    src: konsole/profile
+    dest: "/home/{{ ansible_user_id }}/.local/share/konsole/Tommaso.profile"
+    mode: "0600"
+
+- name: Set default profile
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/konsolerc"
+    section: Desktop Entry
+    option: DefaultProfile
+    value: Tommaso.profile
+    mode: "0600"
+    no_extra_spaces: true
+
+- name: Set konsole Keybindings
+  community.general.ini_file:
+    path: "/home/{{ ansible_user_id }}/.config/kglobalshortcutsrc"
+    section: org.kde.konsole.desktop
+    option: _launch
+    value: Ctrl+Alt+T,Ctrl+Alt+T,Konsole
+    mode: "0644"
+    no_extra_spaces: true

@@ -1,0 +1,20 @@
+- name: Setup Logiops
+  become: true
+  become_user: root
+  block:
+    - name: Install logiops
+      ansible.builtin.dnf:
+        name: logiops
+
+    - name: Copy logiops configuration
+      ansible.builtin.copy:
+        src: logid.cfg
+        dest: /etc/logid.cfg
+        mode: "0644"
+      notify: 'restart logiops'
+
+    - name: Enable logiops service
+      ansible.builtin.service:
+        name: logid.service
+        enabled: true
+        state: started
