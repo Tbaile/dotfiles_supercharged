@@ -32,6 +32,6 @@
         path: /etc/machine-info
         section: null
         option: PRETTY_HOSTNAME
-        value: Tommaso's XPS
+        value: "{{ pretty_hostname }}"
         mode: "0644"
         no_extra_spaces: true
