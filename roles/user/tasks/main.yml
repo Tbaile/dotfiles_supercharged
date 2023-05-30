@@ -39,3 +39,7 @@
 - name: Setup SSH
   ansible.builtin.import_tasks: ssh.yml
   tags: ssh
+
+- name: Setup GPG
+  ansible.builtin.import_tasks: gpg.yml
+  tags: gpg

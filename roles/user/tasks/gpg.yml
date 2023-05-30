@@ -1,0 +1,18 @@
+- name: Install GPG requirements
+  become: true
+  become_user: root
+  ansible.builtin.dnf:
+    name:
+      - kwalletcli
+
+- name: Create GNUPG folder
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user_id }}/.gnupg"
+    state: directory
+    mode: "0700"
+
+- name: Copy GPG config
+  ansible.builtin.copy:
+    src: .gnupg/gpg-agent.conf
+    dest: "/home/{{ ansible_user_id }}/.gnupg//gpg-agent.conf"
+    mode: "0600"
