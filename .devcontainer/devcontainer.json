@@ -1,5 +1,5 @@
 {
-	"name": "Fedora DEV",
+	"name": "Dotfiles",
 	"build": {
 		"context": "..",
 		"dockerfile": "Dockerfile"
@@ -10,8 +10,7 @@
 				"ms-azuretools.vscode-docker",
 				"eamodio.gitlens",
 				"redhat.ansible",
-				"wholroyd.jinja",
-				"GitHub.copilot"
+				"wholroyd.jinja"
 			],
 			"settings": {
 				"files.associations": {
@@ -19,7 +18,8 @@
 					"**/roles/**/tasks/**.yml": "ansible",
 					"**/roles/**/defaults/**.yml": "ansible",
 					"**/roles/**/handlers/**.yml": "ansible"
-				}
+				},
+				"ansible.python.interpreterPath": "/home/dev/.conda/envs/dotfiles/bin/python"
 			}
 		}
 	}
