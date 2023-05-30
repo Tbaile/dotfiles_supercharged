@@ -26,3 +26,20 @@
       loop:
         - systemd-rfkill.service
         - systemd-rfkill.socket
+
+- name: Intel Hardware acceleration
+  become: true
+  become_user: root
+  when: intel_cpu and hardware_acceleration
+  block:
+    - name: Install Intel Drivers and tools
+      ansible.builtin.dnf:
+        name:
+          - intel-gpu-tools
+          - libva-utils
+          - intel-media-driver
+
+    - name: Force LIBVA_DRIVER_NAME to iHD
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        line: "LIBVA_DRIVER_NAME=iHD"
