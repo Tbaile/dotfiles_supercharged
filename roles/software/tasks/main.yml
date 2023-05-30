@@ -8,6 +8,7 @@
       - plasma-browser-integration
       - usbmuxd
       - libimobiledevice
+      - "@Virtualization"
 
 - name: Install Docker
   ansible.builtin.import_tasks: docker.yml
@@ -33,9 +34,17 @@
       - yubikey-manager-qt
       - yubioath-desktop
       - libreoffice
+      - buildah
+      - podman
+      - conda
+      - gh
+      - https://github.com/aquasecurity/trivy/releases/download/v0.41.0/trivy_0.41.0_Linux-64bit.rpm
+      - https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.rpm
 
 - name: Install Software via flatpak
   community.general.flatpak:
     name:
       - com.spotify.Client
       - com.mattermost.Desktop
+      - com.getpostman.Postman
+      - rest.insomnia.Insomnia

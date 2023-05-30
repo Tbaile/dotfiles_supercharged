@@ -21,3 +21,11 @@
         name:
           - google-chrome-stable
         update_cache: true
+
+    - name: Copy Chrome config file
+      ansible.builtin.copy:
+        src: chrome-flags.conf
+        dest: "/home/{{ ansible_user_id }}/.config/chrome-flags.conf"
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: "0600"
