@@ -68,14 +68,14 @@
     <gesture type="SWIPE" fingers="4" direction="RIGHT">
       <action type="SEND_KEYS">
         <modifiers>Control_L+Super_L</modifiers>
-        <keys>Right</keys>
+        <keys>Left</keys>
       </action>
     </gesture>
 
     <gesture type="SWIPE" fingers="4" direction="LEFT">
       <action type="SEND_KEYS">
         <modifiers>Control_L+Super_L</modifiers>
-        <keys>Left</keys>
+        <keys>Right</keys>
       </action>
     </gesture>
   </application>
