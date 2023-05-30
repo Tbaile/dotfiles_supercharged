@@ -10,3 +10,5 @@ RUN conda init bash \
     && echo "conda activate dotfiles" >> /home/dev/.bashrc \
     && conda env create -f /runtime/environment.yml -n dotfiles \
     && conda clean -a -y
+COPY roles/requirements.yml /runtime/requirements.yml
+RUN /home/dev/.conda/envs/dotfiles/bin/ansible-galaxy collection install -r /runtime/requirements.yml
