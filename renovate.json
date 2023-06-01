@@ -1,0 +1,18 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:base"
+    ],
+    "regexManagers": [
+        {
+            "description": "Upgrade conda dependencies",
+            "fileMatch": [
+                "(^|/)environment.yml$"
+            ],
+            "matchStrings": [
+                "# renovate datasource=conda\\sdepName=(?<depName>.*?)\\s+- .*?=(?<currentValue>.*)="
+            ],
+            "datasourceTemplate": "conda"
+        }
+    ]
+}
