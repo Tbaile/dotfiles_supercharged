@@ -13,6 +13,16 @@
                 "# renovate datasource=conda\\sdepName=(?<depName>.*?)\\s+- [a-z0-9]+==\"?(?<currentValue>.*)\"?"
             ],
             "datasourceTemplate": "conda"
+        },
+        {
+            "description": "Upgrade repository tag",
+            "fileMatch": [
+                "(^|\/).*yml$"
+            ],
+            "matchStrings": [
+                "# renovate datasource=github-tags\\srepo=(?<depName>.*?)\\s+version: (?<currentValue>.*)?"
+            ],
+            "datasourceTemplate": "github-tags"
         }
     ]
 }
