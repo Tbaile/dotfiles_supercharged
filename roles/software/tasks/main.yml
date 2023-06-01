@@ -24,6 +24,15 @@
   ansible.builtin.import_tasks: jetbrains.yml
   tags: jetbrains
 
+- name: Install NVM
+  ansible.builtin.git:
+    repo: https://github.com/nvm-sh/nvm.git
+    # renovate datasource=github-tags repo=nvm-sh/nvm
+    version: v0.39.3
+    dest: "/home/{{ ansible_user_id }}/.nvm"
+    depth: 1
+  tags: nvm
+
 - name: Install Software via DNF
   become: true
   become_user: root
