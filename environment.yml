@@ -6,7 +6,7 @@ dependencies:
   - _libgcc_mutex=0.1=main
   - _openmp_mutex=5.1=1_gnu
   # renovate datasource=conda depName=conda-forge/ansible-core
-  - ansible-core=2.14.5=pyhd8ed1ab_0
+  - ansible-core=2.15.0=pyhd8ed1ab_0
   # renovate datasource=conda depName=conda-forge/ansible-lint
   - ansible-lint=6.15.0=pyhd8ed1ab_0
   - attrs=23.1.0=pyh71513ae_1
