@@ -22,7 +22,7 @@
   ansible.builtin.git:
     repo: https://github.com/romkatv/powerlevel10k.git
     # renovate datasource=github-tags repo=romkatv/powerlevel10k
-    version: v1.18.0
+    version: v1.17.0
     dest: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"
     depth: 1
 
