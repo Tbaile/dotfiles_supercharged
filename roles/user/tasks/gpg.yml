@@ -3,7 +3,7 @@
   become_user: root
   ansible.builtin.dnf:
     name:
-      - kwalletcli
+      - gnupg2
 
 - name: Create GNUPG folder
   ansible.builtin.file:
@@ -16,3 +16,4 @@
     src: .gnupg/gpg-agent.conf
     dest: "/home/{{ ansible_user_id }}/.gnupg//gpg-agent.conf"
     mode: "0600"
+  notify: reload gpg-agent

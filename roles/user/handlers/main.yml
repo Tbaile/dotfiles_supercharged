@@ -13,3 +13,9 @@
     scope: user
     daemon_reload: true
   listen: restart ssh agent
+
+- name: Reload GPG agent
+  ansible.builtin.command:
+    cmd: gpg-connect-agent reloadagent /bye
+  changed_when: false
+  listen: reload gpg-agent
