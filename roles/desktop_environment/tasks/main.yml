@@ -86,3 +86,7 @@
 - name: Setup touchegg
   ansible.builtin.import_tasks: touchegg.yml
   tags: touchegg
+
+- name: Easyeffects
+  ansible.builtin.import_tasks: easyeffects.yml
+  tags: easyeffects

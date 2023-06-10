@@ -1,0 +1,15 @@
+- name: Install easyeffects
+  become: true
+  become_user: root
+  ansible.builtin.dnf:
+    name:
+      - easyeffects
+  notify: easyeffects installed
+
+- name: Copy easyeffects profiles
+  ansible.builtin.copy:
+    src: easyeffects/
+    dest: /home/{{ ansible_user_id }}/.config/easyeffects/output/
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: "0644"

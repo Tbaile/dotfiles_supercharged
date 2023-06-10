@@ -5,3 +5,8 @@
     name: logid.service
     state: restarted
   listen: restart logiops
+
+- name: Notify Easyeffects
+  ansible.builtin.debug:
+    msg: Remember to add Easyeffects to autostart via application
+  listen: easyeffects installed
