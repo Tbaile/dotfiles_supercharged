@@ -10,8 +10,7 @@
 
     - name: Install Meslo Nerd Font
       ansible.builtin.get_url:
-        url: https://github.com/ryanoasis/nerd-fonts/raw/bd93a872a6af6e90ee7a95106bce092bef495a11/
-          patched-fonts/Meslo/L/Regular/complete/Meslo%20LG%20L%20Regular%20Nerd%20Font%20Complete%20Mono.ttf
+        url: https://github.com/ryanoasis/nerd-fonts/raw/bd93a872a6af6e90ee7a95106bce092bef495a11/patched-fonts/Meslo/L/Regular/complete/Meslo%20LG%20L%20Regular%20Nerd%20Font%20Complete%20Mono.ttf # noqa: yaml[line-length]
         dest: /usr/share/fonts/MesloNerdFont/Meslo LG L Regular Nerd Font Complete Mono.ttf
         mode: "0644"
         checksum: sha256:166b42c482f10719b0f23fdf463d94ae952cdd800d03c5748a5416e662cad596
