@@ -18,8 +18,9 @@
 					"**/roles/**/defaults/**.yml": "ansible",
 					"**/roles/**/handlers/**.yml": "ansible"
 				},
-				"ansible.python.interpreterPath": "/home/dev/.conda/envs/dotfiles/bin/python"
+				"ansible.python.interpreterPath": "/workspaces/dotfiles_supercharged/.venv/bin/python"
 			}
 		}
-	}
+	},
+	"postCreateCommand": "poetry install && . /workspaces/dotfiles_supercharged/.venv/bin/activate && ansible-galaxy collection install -r roles/requirements.yml"
 }
