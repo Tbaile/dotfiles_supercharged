@@ -35,3 +35,4 @@
         value: "{{ pretty_hostname }}"
         mode: "0644"
         no_extra_spaces: true
+      when: pretty_hostname is defined
