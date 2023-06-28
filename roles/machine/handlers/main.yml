@@ -1,0 +1,7 @@
+- name: Restart TLP
+  become: true
+  become_user: root
+  ansible.builtin.service:
+    name: tlp
+    state: restarted
+  listen: Restart TLP

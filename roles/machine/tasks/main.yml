@@ -19,6 +19,17 @@
         state: started
         enabled: true
 
+    - name: Set TLP configuration
+      community.general.ini_file:
+        path: /etc/tlp.conf
+        mode: "0644"
+        section: null
+        option: RUNTIME_PM_ON_AC
+        value: auto
+        no_extra_spaces: true
+      notify:
+        - Restart TLP
+
     - name: Mask rfkill
       ansible.builtin.systemd:
         name: "{{ item }}"
