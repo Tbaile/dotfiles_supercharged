@@ -12,3 +12,5 @@
     defaultBranch = main
 [fetch]
     prune = true
+[includeif "gitdir:~/Projects/Nethesis/"]
+    path = .gitconfig.nethesis

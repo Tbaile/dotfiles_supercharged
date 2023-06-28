@@ -22,7 +22,7 @@
   ansible.builtin.git:
     repo: https://github.com/romkatv/powerlevel10k.git
     # renovate datasource=github-tags repo=romkatv/powerlevel10k
-    version: v1.18.0
+    version: v1.19.0
     dest: "/home/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"
     depth: 1
 
@@ -32,11 +32,14 @@
     dest: "/home/{{ ansible_user_id }}/.p10k.zsh"
     mode: "0644"
 
-- name: Add Git configuration
+- name: Copy git configuration
   ansible.builtin.copy:
-    src: ".gitconfig"
-    dest: "/home/{{ ansible_user_id }}/.gitconfig"
+    src: "{{ item }}"
+    dest: "/home/{{ ansible_user_id }}/{{ item }}"
     mode: "0600"
+  loop:
+    - .gitconfig
+    - .gitconfig.nethesis
 
 - name: Setup SSH
   ansible.builtin.import_tasks: ssh.yml
