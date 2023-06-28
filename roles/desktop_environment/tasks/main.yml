@@ -67,6 +67,10 @@
     - { option: "Window One Desktop Up", value: "Meta+Ctrl+Shift+Up,Meta+Ctrl+Shift+Up,Window One Desktop Up" }
     - { option: "Window One Desktop to the Left", value: "Meta+Ctrl+Shift+Left,Meta+Ctrl+Shift+Left,Window One Desktop to the Left" }
     - { option: "Window One Desktop to the Right", value: "Meta+Ctrl+Shift+Right,Meta+Ctrl+Shift+Right,Window One Desktop to the Right" }
+    - { option: "Switch to Desktop 1", value: "none,,Switch to Desktop 1" }
+    - { option: "Switch to Desktop 2", value: "none,,Switch to Desktop 2" }
+    - { option: "Switch to Desktop 3", value: "none,,Switch to Desktop 3" }
+    - { option: "Switch to Desktop 4", value: "none,,Switch to Desktop 4" }
 
 - name: Setup Klipper
   community.general.ini_file:
