@@ -1,8 +1,11 @@
 FROM continuumio/miniconda3:23.3.1-0-alpine
+ARG UID=1000
+ARG GID=1000
 RUN apk add --no-cache \
         bash \
         git \
-    && adduser -D -s /bin/bash dev \
+    && addgroup -g ${GID} dev \
+    && adduser -G dev -u ${UID} -D -s /dev/sh dev \
     && mkdir /runtime
 COPY environment.yml /runtime/environment.yml
 USER dev
