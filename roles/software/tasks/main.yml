@@ -28,7 +28,7 @@
   ansible.builtin.git:
     repo: https://github.com/nvm-sh/nvm.git
     # renovate datasource=github-tags repo=nvm-sh/nvm
-    version: v0.39.3
+    version: v0.39.5
     dest: "/home/{{ ansible_user_id }}/.nvm"
     depth: 1
   tags: nvm
