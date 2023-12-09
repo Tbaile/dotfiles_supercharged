@@ -19,11 +19,11 @@ test = ["coverage", "pip-tools", "pytest (>=7.2.0)", "pytest-mock", "pytest-plus
 
 [[package]]
 name = "ansible-core"
-version = "2.15.4"
+version = "2.16.1"
 description = "Radically simple IT automation"
 category = "main"
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 
 [package.dependencies]
 cryptography = "*"
@@ -471,8 +471,8 @@ ansible-compat = [
     {file = "ansible_compat-4.1.2-py3-none-any.whl", hash = "sha256:67f84619b63239383e56eb6725f4617c10569da120b8e78e61ccf779c63afea5"},
 ]
 ansible-core = [
-    {file = "ansible-core-2.15.4.tar.gz", hash = "sha256:c1a8aaede985f79e5932ba2163639379f7d8025bfd9b28378db1649a4ef541ed"},
-    {file = "ansible_core-2.15.4-py3-none-any.whl", hash = "sha256:5c57089405406f3004e948127b518b65509e280d524f61f91cc6360303fc388b"},
+    {file = "ansible-core-2.16.1.tar.gz", hash = "sha256:4fd1b3c86237507c67113f6770d2470f87477cd88244938d100a2d0fc37bf986"},
+    {file = "ansible_core-2.16.1-py3-none-any.whl", hash = "sha256:8fc972ba6ba2161ecbde8166c0042080726c754f69ecb3ccd8c6636c98dc1c7e"},
 ]
 ansible-lint = [
     {file = "ansible-lint-6.17.2.tar.gz", hash = "sha256:9df62535f4228c67947548d6498884d5fa7b22ee3e947372e64ed0e5fcaba038"},
