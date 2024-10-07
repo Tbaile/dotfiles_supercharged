@@ -1,6 +1,6 @@
 collections:
   - name: community.general
-    version: 7.5.2
+    version: 9.5.0
   - name: community.crypto
     version: 2.16.2
   - name: community.docker
