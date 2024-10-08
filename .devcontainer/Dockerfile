@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.13
 ARG UID=1000
 ARG GID=1000
 RUN addgroup --gid ${GID} dev \
